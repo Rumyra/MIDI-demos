@@ -1,0 +1,40 @@
+{
+  "name": "midi-demos",
+  "version": "1.0.0",
+  "description": "A set of little demos to illustrate the awesome power of MIDI",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rumyra/MIDI-demos.git"
+  },
+  "keywords": [
+    "midi",
+    "web",
+    "web",
+    "midi",
+    "keyboard",
+    "instrument",
+    "data",
+    "visual"
+  ],
+  "author": "Ruth John",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rumyra/MIDI-demos/issues"
+  },
+  "homepage": "https://github.com/Rumyra/MIDI-demos#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "htmling": "0.0.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.10.0",
+    "postcss-loader": "^0.9.1",
+    "webpack": "^1.13.1"
+  }
+}
