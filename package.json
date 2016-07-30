@@ -33,8 +33,14 @@
     "htmling": "0.0.7"
   },
   "devDependencies": {
+    "autoprefixer": "^6.3.7",
+    "babel-core": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "nodemon": "^1.10.0",
     "postcss-loader": "^0.9.1",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.1"
   }
 }

@@ -18,3 +18,6 @@ app.get('/', (req, res) => {
 });
 
 app.listen(process.env.PORT || 3001);
+
+// nothing more needed: index.css will be added to build/app.css now
+require('./public/style.css');
