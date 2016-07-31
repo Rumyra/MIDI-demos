@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        app: ['./index']
+        app: ['./public/app.js']
     },
     module: {
         loaders: [{
