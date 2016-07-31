@@ -1,2 +1,2 @@
-// nothing more needed: index.css will be added to build/app.css now
-require('./public/style.css');
+// nothing more needed: index.css will be added to public/app.css now
+require('./style.css');
