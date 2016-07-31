@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        app: ['./index']
+        app: ['.src/app']
     },
     module: {
         loaders: [{
@@ -18,8 +18,8 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
-        path: path.join(__dirname, './build'),
-        publicPath: '/build'
+        path: path.join(__dirname, './public'),
+        publicPath: '/public'
     },
     plugins: [
         new ExtractTextPlugin('[name].css')

@@ -16,7 +16,7 @@ figure {
     outline: 0;
     vertical-align: baseline;
 }
-// legacy - for browsers who struggle with html5 elements
+/* legacy - for browsers who struggle with html5 elements*/
 section, article, aside, footer, nav, header, hgroup, details, figure, figcaption, summary { display: block; }
 audio, canvas, video { display: inline-block; }
 /*Prevents iOS text size adjust after orientation change, without disabling user zoom.*/

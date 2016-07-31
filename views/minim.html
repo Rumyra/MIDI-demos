@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico" />
+
+  <!--meta content-->
+  
+  <meta name="author" content="Ruth John (@rumyra)">
+  <meta name="dcterms.rightsHolder" content="Built by Ruth John, United Kingdom, 2015">
+  <title>MIDI Demos | Rumyra</title>
+  <meta name="description" content="">
+
+  <link type="text/css" href="style.css" rel="stylesheet" media="screen" />
+  
+  <!--include if you want modenizr (rest of scripts just before </body>)
+  <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+  -->
+  <style type="text/css">
+    body > div > div[class^="page-"] {display: none;}
+    body > div > div.page-contact {display: flex;}
+  </style>
+</head>
+
+<body>
+<div class="wrapper page-minim">
+
+
+</div>
+<script type="text/javascript" src="app.js"></script>
+
+<script type="text/javascript">
+  // just here for keepsies
+
+  var noble = require("thethingbox-noble");
+
+var serviceUUIDs = ["FC50EABE-8CFA-4F01-A654-B726A8F6E9E6"]; // default: [] => all
+var allowDuplicates = false; // default: false
+
+noble.startScanning(serviceUUIDs, allowDuplicates); // particular UUID's
+
+noble.on('discover', function(peripheral) {
+  peripheral.connect(function(error) {
+    console.log('connected to peripheral: ' + peripheral.uuid);
+  });
+});
+
+</script>
+
+</body>
+</html>

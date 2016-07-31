@@ -2,9 +2,9 @@
   "name": "midi-demos",
   "version": "1.0.0",
   "description": "A set of little demos to illustrate the awesome power of MIDI",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
