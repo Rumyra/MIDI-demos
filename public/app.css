@@ -69,6 +69,11 @@ body {
 }
 #midi-data {
   height: 80vh; border:1px solid green;
+  position: relative
+}
+#midi-data p {
+    position: absolute;
+    bottom: 10px;
 }
 #keyboard {
   height: 20vh;

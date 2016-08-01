@@ -59,11 +59,53 @@
 
 <script type="text/javascript">
 
-  var keyboard = document.querySelector('#keyboard');
+  var keyboard = document.querySelector('#keyboard'),
+    animScreen = document.querySelector('#midi-data');
+    
+
+  function PianoAnim(screenDiv) {
+    this.screen = screenDiv;
+  }
+
+// key range 30-90
+  PianoAnim.prototype.displayDataEl = function(keyEl) {
+    this.note = keyEl.dataset.note;
+    this.midiData = '[144,'+this.note+',64]';
+    this.left = keyEl.offsetLeft;
+    this.dataEl = this.createDataEl(this.midiData, this.left, this.note);
+    this.screen.appendChild(this.dataEl);
+    this.changeDataToEmoji(this.dataEl, this.note);
+  };
+
+  PianoAnim.prototype.changeDataToEmoji = function(pEl, note) {
+    this.para = pEl;
+    this.emoji = this.encodeData(note);
+    this.para.textContent = this.emoji;
+  }
+
+  PianoAnim.prototype.createDataEl = function(text,left,note) {
+    var dataEl = document.createElement('p');
+    dataEl.textContent = text;
+    dataEl.style.left = (left-30)+'px';
+    dataEl.style.color = 'hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)';
+    return dataEl;
+  }
+
+  PianoAnim.prototype.encodeData = function(note) {
+    var decoder = new TextDecoder();
+    var byteArray = new Uint8Array([144,note,64]);
+    var emoji = decoder.decode(byteArray,{stream:true});
+    return emoji;
+  }
+
+  var anim = new PianoAnim(animScreen);
+
   keyboard.addEventListener("click", function(event) {
     if (event.target.nodeName == "I" || "B")
-      console.log("Clicked", event.target.textContent);
+      console.log("Clicked", event.target);
+      anim.displayDataEl(event.target);
   });
+
 </script>
 
 </body>

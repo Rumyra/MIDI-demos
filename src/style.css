@@ -63,6 +63,10 @@ body {
 }
 #midi-data {
   height: 80vh; border:1px solid green;
+  position: relative;
+  & p {
+    position: absolute; bottom: var(--unit);
+  }
 }
 #keyboard {
   height: 20vh;
