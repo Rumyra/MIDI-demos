@@ -21,20 +21,74 @@ section, article, aside, footer, nav, header, hgroup, details, figure, figcaptio
 audio, canvas, video { display: inline-block; }
 /*Prevents iOS text size adjust after orientation change, without disabling user zoom.*/
 html { -webkit-text-size-adjust: 100%; }
-// legacy support
+/* legacy support */
 [hidden] { display: none; }
+
+:root {
+  --lightGrey: #aaa;
+  --darkGrey: #222;
+  --white: #efefef;
+  --black: #111;
+  --unit: 1.5em;
+}
 
 body {
   overflow: auto;
-  background-color: #222;
+  background-color: var(--darkGrey);
   font-family: sans-serif;
   font-size: 100%;
-  color: white;
+  color: var(--lightGrey);
   line-height: 1.4;
 }
 
-.page-index {}
-.page-index a {
-  display: block;
-  margin: 20px auto;
+.page-index {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  & a {
+    display: block; width: 30%;
+    margin: 20px auto; padding: var(--unit);
+    background: linear-gradient(20deg, #333, var(--darkGrey));
+    border:1px solid var(--lightGrey); border-radius:1px;
+    box-shadow: 0px 0px 4px var(--black);
+    color: var(--lightGrey); text-decoration: none; text-align: center;
+  }
+  & a:hover {background: linear-gradient(20deg, var(--darkGrey), #333);}
 }
+
+.page-piano {
+  height: 100vh;
+  display: flex; flex-direction: column;
+}
+#midi-data {
+  height: 80vh; border:1px solid green;
+}
+#keyboard {
+  height: 20vh;
+  display: flex; justify-content: center; align-items: stretch;
+  border:1px solid var(--lightGrey);
+  & i, & b {
+    display:inline-block;
+    position:relative; z-index:5;
+    color: transparent;
+  }
+  & i {
+    width:34px; /*height:176px;*/
+    background:white;
+    border:1px solid var(--darkGrey);
+    border-left-width: 0px;
+  }
+  & b {
+    z-index:10;
+    width:26px; /*height:104px;*/
+    margin:0px -15px;
+    background:black;
+    box-shadow:1px 1px darkgrey;
+  }
+  /*.key-last {position:absolute; top:0px; right:0px;}*/
+}
+
+
+
+

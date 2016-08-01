@@ -16,6 +16,9 @@ app.set('view engine', 'html');
 app.get('/', (req, res) => {
   res.render('index');
 });
+app.get('/piano', (req, res) => {
+  res.render('piano');
+});
 
 app.listen(process.env.PORT || 3001);
 

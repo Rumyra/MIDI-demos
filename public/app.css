@@ -21,20 +21,85 @@ section, article, aside, footer, nav, header, hgroup, details, figure, figcaptio
 audio, canvas, video { display: inline-block; }
 /*Prevents iOS text size adjust after orientation change, without disabling user zoom.*/
 html { -webkit-text-size-adjust: 100%; }
-// legacy support
+/* legacy support */
 [hidden] { display: none; }
-
 body {
   overflow: auto;
   background-color: #222;
   font-family: sans-serif;
   font-size: 100%;
-  color: white;
+  color: #aaa;
   line-height: 1.4;
 }
-
-.page-index {}
-.page-index a {
-  display: block;
-  margin: 20px auto;
+.page-index {
+  height: 90vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around
 }
+.page-index a {
+    display: block;
+    width: 30%;
+    margin: 20px auto;
+    padding: 1.5em;
+    background: -webkit-linear-gradient(70deg, #333, #222);
+    background: linear-gradient(20deg, #333, #222);
+    border: 1px solid #aaa;
+    border-radius: 1px;
+    box-shadow: 0px 0px 4px #111;
+    color: #aaa;
+    text-decoration: none;
+    text-align: center;
+}
+.page-index a:hover {
+    background: -webkit-linear-gradient(70deg, #222, #333);
+    background: linear-gradient(20deg, #222, #333);
+}
+.page-piano {
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column;
+}
+#midi-data {
+  height: 80vh; border:1px solid green;
+}
+#keyboard {
+  height: 20vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: stretch; -ms-flex-align: stretch; align-items: stretch;
+  border: 1px solid #aaa
+  /*.key-last {position:absolute; top:0px; right:0px;}*/
+}
+#keyboard i, #keyboard b {
+    display: inline-block;
+    position: relative;
+    z-index: 5;
+    color: transparent;
+}
+#keyboard i {
+    width: 34px;
+    /*height:176px;*/
+    background: white;
+    border: 1px solid #222;
+    border-left-width: 0px;
+}
+#keyboard b {
+    z-index: 10;
+    width: 26px;
+    /*height:104px;*/
+    margin: 0px -15px;
+    background: black;
+    box-shadow: 1px 1px darkgrey;
+}
+
+
+
+
