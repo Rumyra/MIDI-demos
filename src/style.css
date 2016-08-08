@@ -27,9 +27,17 @@ html { -webkit-text-size-adjust: 100%; }
 :root {
   --lightGrey: #aaa;
   --darkGrey: #222;
+  --lessDarkGrey: #333;
   --white: #efefef;
   --black: #111;
   --unit: 1.5em;
+
+  --interface: {
+    background-color:var(--lessDarkGrey);
+    background: linear-gradient(20deg, var(--lessDarkGrey), var(--darkGrey));
+    border:1px solid var(--lightGrey); border-radius:1px;
+    box-shadow: 0px 0px 4px var(--black);
+  };
 }
 
 body {
@@ -49,12 +57,10 @@ body {
   & a {
     display: block; width: 30%;
     margin: 20px auto; padding: var(--unit);
-    background: linear-gradient(20deg, #333, var(--darkGrey));
-    border:1px solid var(--lightGrey); border-radius:1px;
-    box-shadow: 0px 0px 4px var(--black);
+    @apply --interface;
     color: var(--lightGrey); text-decoration: none; text-align: center;
   }
-  & a:hover {background: linear-gradient(20deg, var(--darkGrey), #333);}
+  & a:hover {background: linear-gradient(20deg, var(--darkGrey), var(--lessDarkGrey));}
 }
 
 .page-piano {
@@ -91,6 +97,35 @@ body {
     box-shadow:1px 1px darkgrey;
   }
   /*.key-last {position:absolute; top:0px; right:0px;}*/
+}
+
+.minim {
+  width: calc(var(--unit)*14);
+  padding: var(--unit);
+  @apply --interface;
+  & h2 {
+    transform-origin: 0 0;
+    transform:rotate(-90deg) translateX(-120px) translateY(-40px);
+  }
+  & .buttons {
+    display: flex; flex-wrap: wrap;
+    
+  }
+  & button {
+    height: calc(var(--unit)*4); width: calc(var(--unit)*4);
+    margin:calc(var(--unit)/2);
+    background-color: purple;
+  }
+}
+.page-synth {
+  & .minim {
+    padding-top:0px;
+    padding-left: calc(var(--unit)*2);
+  }
+  
+}
+.page-minim {
+  
 }
 
 

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico" />
+
+  <!--meta content-->
+  
+  <meta name="author" content="Ruth John (@rumyra)">
+  <meta name="dcterms.rightsHolder" content="Built by Ruth John, United Kingdom, 2015">
+  <title>MIDI Demos | Rumyra</title>
+  <meta name="description" content="">
+
+  <link type="text/css" href="app.css" rel="stylesheet" media="screen" />
+  
+  <!--include if you want modenizr (rest of scripts just before </body>)
+  <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+  -->
+  <script type="scripts/Tone.min.js"></script>
+  <script type="scripts/StartAudioContext.js"></script>
+  
+</head>
+
+<body>
+<div class="wrapper page-synth">
+<a id="url-join" href="{{JOIN_URL}}">{{JOIN_URL}}</a>
+
+<section class="minim" id="minim-main">
+  <h2>minim</h2>
+  <div class="buttons">
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+  </div>
+</section>
+
+
+</div>
+<script type="text/javascript" src="app.js"></script>
+
+<script type="text/javascript">
+
+  function setButtonState(buttonEl) {
+    this.button = buttonEl;
+    if (this.button.dataset.state === "off") {
+      this.button.dataset.state = "on";
+    } else {
+      this.button.dataset.state = "off";
+    }
+  }
+  //setup a polyphonic sampler
+    var keys = new Tone.MultiPlayer({
+      urls : {
+        "beep" : "./public/sounds/beep.wav",
+        "chirp" : "./public/sounds/chirp.wav",
+        "crash" : "./public/sounds/crash",
+        "curve" : "./public/sounds/curve",
+        "ding" : "./public/sounds/ding",
+        "hihat" : "./public/sounds/hihat",
+        "kick" : "./public/sounds/kick",
+        "punch" : "./public/sounds/punch",
+        "shadow" : "./public/sounds/shadow",
+        "snare" : "./public/sounds/snare",
+        "symbol" : "./public/sounds/symbol",
+      },
+      volume : -5,
+      fadeOut : 0.1,
+    }).toMaster();
+    //the notes
+    var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"];
+    var buttons = document.querySelectorAll('.buttons button');
+    var loop = new Tone.Sequence(function(time, col))
+
+
+    var loop = new Tone.Sequence(function(time, col){
+      var column = matrix1.matrix[col];
+      for (var i = 0; i < 4; i++){
+        if (column[i] === 1){
+          //slightly randomized velocities
+          var vel = Math.random() * 0.5 + 0.5;
+          keys.start(noteNames[i], time, 0, "16n", 0, vel);
+        }
+      }
+    }, [0, 1, 2, 3, 4, 5, 6, 7], "8n");
+    Tone.Transport.start();
+  
+</script>
+
+</body>
+</html>

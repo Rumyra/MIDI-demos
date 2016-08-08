@@ -16,40 +16,77 @@
   <title>MIDI Demos | Rumyra</title>
   <meta name="description" content="">
 
-  <link type="text/css" href="style.css" rel="stylesheet" media="screen" />
+  <link type="text/css" href="app.css" rel="stylesheet" media="screen" />
   
   <!--include if you want modenizr (rest of scripts just before </body>)
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
   -->
-  <style type="text/css">
-    body > div > div[class^="page-"] {display: none;}
-    body > div > div.page-contact {display: flex;}
-  </style>
+  
 </head>
 
 <body>
 <div class="wrapper page-minim">
+
+<div id="form-name">
+  <form method="post" action="/" class="form-small">
+    <fieldset><legend>Hello, what's your name?</legend>
+      <div class="form-field">
+        <label for="input-name">Name</label>
+        <input type="text" name="input-name" id="input-name" placeholder="Brian Eno" />
+      </div>
+      <input type="submit" value="Let's Go!" />
+    </fieldset>
+  </form>
+</div>
+
+<div id="minim-show">
+  <p>Hi 'name here', you're the 'track here' track! See yourself on the big screen and press below to play your sound.</p>
+
+  <section class="minim">
+    <div class="buttons">
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+      <button></button>
+    </div>
+  </section>
+</div>
 
 
 </div>
 <script type="text/javascript" src="app.js"></script>
 
 <script type="text/javascript">
-  // just here for keepsies
+  //setup a polyphonic sampler
+    var keys = new Tone.MultiPlayer({
+      urls : {
+        "A" : "./audio/casio/A1.mp3",
+        "C#" : "./audio/casio/Cs2.mp3",
+        "E" : "./audio/casio/E2.mp3",
+        "F#" : "./audio/casio/Fs2.mp3",
+      },
+      volume : -10,
+      fadeOut : 0.1,
+    }).toMaster();
+    //the notes
+    var noteNames = ["F#", "E", "C#", "A"];
+    var loop = new Tone.Sequence(function(time, col){
+      var column = matrix1.matrix[col];
+      for (var i = 0; i < 4; i++){
+        if (column[i] === 1){
+          //slightly randomized velocities
+          var vel = Math.random() * 0.5 + 0.5;
+          keys.start(noteNames[i], time, 0, "32n", 0, vel);
+        }
+      }
+    }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n");
+    Tone.Transport.start();
 
-  var noble = require("thethingbox-noble");
-
-var serviceUUIDs = ["FC50EABE-8CFA-4F01-A654-B726A8F6E9E6"]; // default: [] => all
-var allowDuplicates = false; // default: false
-
-noble.startScanning(serviceUUIDs, allowDuplicates); // particular UUID's
-
-noble.on('discover', function(peripheral) {
-  peripheral.connect(function(error) {
-    console.log('connected to peripheral: ' + peripheral.uuid);
-  });
-});
-
+  
 </script>
 
 </body>
