@@ -134,6 +134,12 @@ body {
     margin: 0.75em;
     background-color: purple;
 }
+.minim button[data-state="on"] {
+    background-color: white;
+}
+.minim button.current {
+    border: 2px solid #aaa;
+}
 .page-synth {
   
 }
