@@ -21,8 +21,8 @@
   <!--include if you want modenizr (rest of scripts just before </body>)
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
   -->
-  <script type="scripts/Tone.min.js"></script>
-  <script type="scripts/StartAudioContext.js"></script>
+  <script src="scripts/Tone.min.js"></script>
+  <script src="scripts/StartAudioContext.js"></script>
   
 </head>
 
@@ -49,51 +49,70 @@
 <script type="text/javascript" src="app.js"></script>
 
 <script type="text/javascript">
+  
+  //the notes
+  var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"];
+  var buttons = document.querySelectorAll('.buttons button');
 
-  function setButtonState(buttonEl) {
-    this.button = buttonEl;
-    if (this.button.dataset.state === "off") {
-      this.button.dataset.state = "on";
+  var SEQUENCE_SIZE = buttons.length;
+
+  var mainSequence = [];
+  var sequenceStore = [];
+
+  function setButtonState() {
+    var buttonEl = this;
+
+    if (buttonEl.dataset.state === "off") {
+      buttonEl.dataset.state = "on";
+      sequenceStore[parseInt(buttonEl.dataset.number)] = 'C5';
     } else {
-      this.button.dataset.state = "off";
+      buttonEl.dataset.state = "off";
+      sequenceStore[parseInt(buttonEl.dataset.number)] = null;
     }
   }
+
   //setup a polyphonic sampler
-    var keys = new Tone.MultiPlayer({
-      urls : {
-        "beep" : "./public/sounds/beep.wav",
-        "chirp" : "./public/sounds/chirp.wav",
-        "crash" : "./public/sounds/crash",
-        "curve" : "./public/sounds/curve",
-        "ding" : "./public/sounds/ding",
-        "hihat" : "./public/sounds/hihat",
-        "kick" : "./public/sounds/kick",
-        "punch" : "./public/sounds/punch",
-        "shadow" : "./public/sounds/shadow",
-        "snare" : "./public/sounds/snare",
-        "symbol" : "./public/sounds/symbol",
-      },
-      volume : -5,
-      fadeOut : 0.1,
-    }).toMaster();
-    //the notes
-    var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"];
-    var buttons = document.querySelectorAll('.buttons button');
-    var loop = new Tone.Sequence(function(time, col``dx`))
-
-
-    var loop = new Tone.Sequence(function(time, col){
-      var column = matrix1.matrix[col];
-      for (var i = 0; i < 4; i++){
-        if (column[i] === 1){
-          //slightly randomized velocities
-          var vel = Math.random() * 0.5 + 0.5;
-          keys.start(noteNames[i], time, 0, "16n", 0, vel);
-        }
-      }
-    }, [0, 1, 2, 3, 4, 5, 6, 7], "8n");
-    Tone.Transport.start();
+  var keys = new Tone.MultiPlayer({
+    urls : {
+      "beep" : "./sounds/beep.wav",
+      "chirp" : "./sounds/chirp.wav",
+      "crash" : "./sounds/crash.wav",
+      "curve" : "./sounds/curve.wav",
+      "ding" : "./sounds/ding.wav",
+      "hihat" : "./sounds/hihat.wav",
+      "kick" : "./sounds/kick.wav",
+      "punch" : "./sounds/punch.wav",
+      "shadow" : "./sounds/shadow.wav",
+      "snare" : "./sounds/snare.wav",
+      "symbol" : "./sounds/symbol.wav",
+    },
+    volume : -5,
+    fadeOut : 0.1,
+  }).toMaster();
   
+  // init mainSequence & sequenceStore
+  for(var i=0; i < SEQUENCE_SIZE; i++) {
+    sequenceStore[i] = null;
+    mainSequence[i] = i;
+  }
+
+  // init buttons
+  [].forEach.call(buttons, function(button, idx) {
+    button.addEventListener('click', setButtonState, false);
+    button.dataset.number = idx;
+  });
+
+  var loop = new Tone.Sequence(function(time, col) {
+      if(sequenceStore[col] !== null) {
+        //slightly randomized velocities
+        var vel = Math.random() * 0.5 + 0.5;
+        keys.start(noteNames[i], time, 0, "16n", 0, vel);
+      }
+  }, mainSequence, "8n");
+
+  Tone.Transport.start();
+  loop.start();
+
 </script>
 
 </body>
