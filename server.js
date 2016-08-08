@@ -32,21 +32,21 @@ app.get('/stepseq', (req, res) => {
   res.render('crowdsynth');
 });
 
-var pusher = new Pusher({
-  appId: process.env.PUSHID,
-  key: process.env.PUSHKEY,
-  secret: process.env.PUSHSEC
-});
-pusher.port = 443;
+// var pusher = new Pusher({
+//   appId: process.env.PUSHID,
+//   key: process.env.PUSHKEY,
+//   secret: process.env.PUSHSEC
+// });
+// pusher.port = 443;
 
 
-app.post('/pusher/auth', function(req, res) {
-  console.log('auth called', req.body);
-  var socketId = req.body.socket_id;
-  var channel = req.body.channel_name;
-  var auth = pusher.authenticate(socketId, channel);
-  res.send(auth);
-});
+// app.post('/pusher/auth', function(req, res) {
+//   console.log('auth called', req.body);
+//   var socketId = req.body.socket_id;
+//   var channel = req.body.channel_name;
+//   var auth = pusher.authenticate(socketId, channel);
+//   res.send(auth);
+// });
 
 app.listen(process.env.PORT || 3001);
 
