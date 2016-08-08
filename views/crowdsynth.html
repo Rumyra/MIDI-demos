@@ -71,6 +71,10 @@
     }
   }
 
+  function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
   //setup a polyphonic sampler
   var keys = new Tone.MultiPlayer({
     urls : {
@@ -106,7 +110,7 @@
       if(sequenceStore[col] !== null) {
         //slightly randomized velocities
         var vel = Math.random() * 0.5 + 0.5;
-        keys.start(noteNames[i], time, 0, "16n", 0, vel);
+        keys.start(noteNames[randomIntFromInterval(0, noteNames.length-1)], time, 0, "16n", 0, vel);
       }
 
       [].forEach.call(buttons, function(button) {
