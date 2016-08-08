@@ -44,6 +44,20 @@
   </div>
 </section>
 
+<section class="minim" id="minim-main2">
+  <h2>minim</h2>
+  <div class="buttons">
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+    <button data-state="off"></button>
+  </div>
+</section>
+
 
 </div>
 <script type="text/javascript" src="app.js"></script>
@@ -52,22 +66,24 @@
   
   //the notes
   var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"];
-  var buttons = document.querySelectorAll('.buttons button');
+  var buttons = document.querySelectorAll('#minim-main .buttons button');
+  var buttons2 = document.querySelectorAll('#minim-main2 .buttons button');
 
   var SEQUENCE_SIZE = buttons.length;
 
   var mainSequence = [];
   var sequenceStore = [];
+  var sequenceStore2 = [];
 
-  function setButtonState() {
-    var buttonEl = this;
+  function setButtonState(store, button) {
+    var buttonEl = button;
 
     if (buttonEl.dataset.state === "off") {
       buttonEl.dataset.state = "on";
-      sequenceStore[parseInt(buttonEl.dataset.number)] = 'C5';
+      store[parseInt(buttonEl.dataset.number)] = 'C5';
     } else {
       buttonEl.dataset.state = "off";
-      sequenceStore[parseInt(buttonEl.dataset.number)] = null;
+      store[parseInt(buttonEl.dataset.number)] = null;
     }
   }
 
@@ -97,12 +113,23 @@
   // init mainSequence & sequenceStore
   for(var i=0; i < SEQUENCE_SIZE; i++) {
     sequenceStore[i] = null;
+    sequenceStore2[i] = null;
     mainSequence[i] = i;
   }
 
   // init buttons
   [].forEach.call(buttons, function(button, idx) {
-    button.addEventListener('click', setButtonState, false);
+    button.addEventListener('click', function() {
+      setButtonState(sequenceStore, button);
+    }, false);
+    button.dataset.number = idx;
+  });
+
+  // init buttons2
+  [].forEach.call(buttons2, function(button, idx) {
+    button.addEventListener('click', function() {
+      setButtonState(sequenceStore2, button);
+    }, false);
     button.dataset.number = idx;
   });
 
@@ -110,16 +137,26 @@
       if(sequenceStore[col] !== null) {
         //slightly randomized velocities
         var vel = Math.random() * 0.5 + 0.5;
-        keys.start(noteNames[randomIntFromInterval(0, noteNames.length-1)], time, 0, "16n", 0, vel);
+        keys.start(noteNames[6], time, 0, "16n", 0, vel);
+      }
+
+      if(sequenceStore2[col] !== null) {
+        //slightly randomized velocities
+        var vel = Math.random() * 0.5 + 0.5;
+        keys.start(noteNames[9], time, 0, "16n", 0, vel);
       }
 
       [].forEach.call(buttons, function(button) {
         button.classList.remove('current');
       });
 
-      if(parseInt(buttons[col].dataset.number) === col) {
-        buttons[col].classList.add('current');
-      }
+      [].forEach.call(buttons2, function(button) {
+        button.classList.remove('current');
+      });
+
+      
+      buttons[col].classList.add('current');
+      buttons2[col].classList.add('current');
 
   }, mainSequence, "8n");
 
