@@ -109,11 +109,14 @@
         keys.start(noteNames[i], time, 0, "16n", 0, vel);
       }
 
-      if(parseInt(buttons[i].dataset.number) === i) {
-        buttons[i].classList.add('current');
-      } else {
-        buttons[i].classList.remove('current');
+      [].forEach.call(buttons, function(button) {
+        button.classList.remove('current');
+      });
+
+      if(parseInt(buttons[col].dataset.number) === col) {
+        buttons[col].classList.add('current');
       }
+
   }, mainSequence, "8n");
 
   Tone.Transport.start();
