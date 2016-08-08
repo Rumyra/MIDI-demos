@@ -109,12 +109,17 @@ body {
   }
   & .buttons {
     display: flex; flex-wrap: wrap;
-    
   }
   & button {
     height: calc(var(--unit)*4); width: calc(var(--unit)*4);
     margin:calc(var(--unit)/2);
     background-color: purple;
+  }
+  & button[data-state="on"] {
+    background-color: white;
+  }
+  & button.current {
+    border:2px solid var(--lightGrey);
   }
 }
 .page-synth {
