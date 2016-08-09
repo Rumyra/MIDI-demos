@@ -143,6 +143,7 @@
   channel.bind('pusher:member_removed', function(member) {
     var remMinim = document.getElementById(member.id);
     if(remMinim) remMinim.parentNode.removeChild(remMinim);
+    delete sequences[member.id];
   });
 
 
@@ -202,22 +203,26 @@
 
   var loop = new Tone.Sequence(function(time, col) {
       // loop over all client sequences
-      for(var key in sequences) {
-        var sequence = sequences[key];
-        var minim = document.getElementById(key);
-        var buttons = minim.querySelectorAll('button');
+      try {
+        for(var key in sequences) {
+          var sequence = sequences[key];
+          var minim = document.getElementById(key);
+          var buttons = minim.querySelectorAll('button');
 
-        if(sequence[col] !== null) {
-          //slightly randomized velocities
-          var vel = Math.random() * 0.5 + 0.5;
-          keys.start(noteNames[9], time, 0, "16n", 0, vel);
+          if(sequence[col] !== null) {
+            //slightly randomized velocities
+            var vel = Math.random() * 0.5 + 0.5;
+            keys.start(noteNames[9], time, 0, "16n", 0, vel);
+          }
+
+          [].forEach.call(buttons, function(button) {
+            button.classList.remove('current');
+          });
+
+          buttons[col].classList.add('current');
         }
-
-        [].forEach.call(buttons, function(button) {
-          button.classList.remove('current');
-        });
-
-        buttons[col].classList.add('current');
+      } catch(e) {
+        // do nothing :^)
       }
 
       /*if(sequenceStore[col] !== null) {
