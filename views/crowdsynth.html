@@ -23,6 +23,7 @@
   -->
   <script src="scripts/Tone.min.js"></script>
   <script src="scripts/StartAudioContext.js"></script>
+  <script src="scripts/pusher.min.js"></script>
   
 </head>
 
@@ -60,9 +61,24 @@
 
 
 </div>
+<div id="pusher" data-key="{{PUSHKEY}}"></div>
 <script type="text/javascript" src="app.js"></script>
 
 <script type="text/javascript">
+
+  // pusher
+  var pushConfig = document.getElementById('pusher').dataset;
+  var pusher = new Pusher(pushConfig.key, {encrypted:true});
+  Pusher.channel_auth_endpoint = 'http://localhost:3001/pusher/auth';
+  pusher.connection.bind('state_change', function(states) {
+      console.log("Pusher's current state is " + states.current);
+  });
+  // subscribe to channel
+  var channel = pusher.subscribe('private-stepSeq_channel');
+
+  channel.bind('pusher:subscription_succeeded', function() {
+    console.log('subscription succeeded');
+  });
   
   //the notes
   var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"];
@@ -71,7 +87,9 @@
 
   var SEQUENCE_SIZE = buttons.length;
 
+  // to give to tone
   var mainSequence = [];
+  // on & off kept
   var sequenceStore = [];
   var sequenceStore2 = [];
 
@@ -87,6 +105,7 @@
     }
   }
 
+  // probs don't need
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
@@ -114,6 +133,7 @@
   for(var i=0; i < SEQUENCE_SIZE; i++) {
     sequenceStore[i] = null;
     sequenceStore2[i] = null;
+    // so we don't have to write it
     mainSequence[i] = i;
   }
 

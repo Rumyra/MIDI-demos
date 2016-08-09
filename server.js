@@ -3,6 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const htmling = require('htmling');
+const Pusher = require('pusher');
+
+var pusher = new Pusher({
+  appId: process.env.PUSHID,
+  key: process.env.PUSHKEY,
+  secret: process.env.PUSHSEC
+});
+pusher.port = 443;
 
 const app = express();
 
@@ -29,24 +37,17 @@ app.get('/stepseq', (req, res) => {
   // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   var fullUrl = req.protocol + '://' + req.get('host') + '/minim';
   req.JOIN_URL = fullUrl;
-  res.render('crowdsynth');
+  req.PUSHKEY = process.env.PUSHKEY;
+  res.render('crowdsynth', req);
 });
 
-// var pusher = new Pusher({
-//   appId: process.env.PUSHID,
-//   key: process.env.PUSHKEY,
-//   secret: process.env.PUSHSEC
-// });
-// pusher.port = 443;
-
-
-// app.post('/pusher/auth', function(req, res) {
-//   console.log('auth called', req.body);
-//   var socketId = req.body.socket_id;
-//   var channel = req.body.channel_name;
-//   var auth = pusher.authenticate(socketId, channel);
-//   res.send(auth);
-// });
+app.post('/pusher/auth', function(req, res) {
+  console.log('auth called', req.body);
+  var socketId = req.body.socket_id;
+  var channel = req.body.channel_name;
+  var auth = pusher.authenticate(socketId, channel);
+  res.send(auth);
+});
 
 app.listen(process.env.PORT || 3001);
 

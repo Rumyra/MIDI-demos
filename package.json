@@ -30,7 +30,8 @@
     "body-parser": "^1.15.2",
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
-    "htmling": "0.0.7"
+    "htmling": "0.0.7",
+    "pusher": "^1.4.0-rc6"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.7",
