@@ -32,7 +32,6 @@
 <a id="url-join" href="{{JOIN_URL}}">{{JOIN_URL}}</a>
 
 <section class="minim" id="minim-main">
-  <h2>minim</h2>
   <div class="buttons">
     <button data-state="off"></button>
     <button data-state="off"></button>
@@ -46,7 +45,6 @@
 </section>
 
 <section class="minim" id="minim-main2">
-  <h2>minim</h2>
   <div class="buttons">
     <button data-state="off"></button>
     <button data-state="off"></button>
@@ -61,7 +59,7 @@
 
 
 </div>
-<div id="pusher" data-key="{{PUSHKEY}}"></div>
+<div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
 <script type="text/javascript" src="app.js"></script>
 
 <script type="text/javascript">
@@ -69,29 +67,18 @@
   // pusher
   var pushConfig = document.getElementById('pusher').dataset;
   var pusher = new Pusher(pushConfig.key, {encrypted:true});
-  Pusher.channel_auth_endpoint = 'http://localhost:3001/pusher/auth';
+  Pusher.channel_auth_endpoint = pushConfig.thisurl+'/pusher/auth';
   pusher.connection.bind('state_change', function(states) {
       console.log("Pusher's current state is " + states.current);
   });
   // subscribe to channel
-  var channel = pusher.subscribe('private-stepSeq_channel');
+  var channel = pusher.subscribe('presence-stepSeq_channel');
 
-  channel.bind('pusher:subscription_succeeded', function() {
-    console.log('subscription succeeded');
-  });
-  
-  //the notes
-  var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"];
-  var buttons = document.querySelectorAll('#minim-main .buttons button');
-  var buttons2 = document.querySelectorAll('#minim-main2 .buttons button');
-
-  var SEQUENCE_SIZE = buttons.length;
-
-  // to give to tone
-  var mainSequence = [];
-  // on & off kept
-  var sequenceStore = [];
-  var sequenceStore2 = [];
+  // vars
+  var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"],
+    SEQUENCE_SIZE = 8,
+    mainSequence = [],
+    wrapper = document.querySelector('.wrapper');
 
   function setButtonState(store, button) {
     var buttonEl = button;
@@ -105,10 +92,55 @@
     }
   }
 
-  // probs don't need
-  function randomIntFromInterval(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  function createMinim(uid) {
+    var masterMinim = document.getElementById('minim-main');
+    var dupMinim = masterMinim.cloneNode(true);
+    dupMinim.setAttribute('id', uid);
+    return dupMinim;
   }
+
+  function setUpSeqs(totalUsers, seqSize) {
+    for(var i=0; i < totalUsers; i++) {
+
+      var sequence = [];
+
+      for(var j=0; j < max_sequence_length; j++) {
+        sequence[j] = null;
+      }
+
+      sequenceStores[i] = sequence;
+      mainSequence[i] = i;
+    }
+  }
+
+  // when a user joins add a new minim
+  channel.bind('pusher:member_added', function(member) {
+    console.log('theres a new member -'+member.id);
+    var newMinim = createMinim(member.id);
+    wrapper.appendChild(newMinim);
+
+  });
+  // when they press stuff do update the right sequencer
+  channel.bind('client-buttonPressed', function(data) {
+    //we get userid - which is minim id and sequence store
+  })
+  // when a user disconnects remove minim
+  channel.bind('pusher:member_removed', function(member) {
+    var remMinim = document.getElementById(member.id);
+    remMinim.remove();
+  });
+  
+
+
+  var buttons = document.querySelectorAll('#minim-main .buttons button');
+  var buttons2 = document.querySelectorAll('#minim-main2 .buttons button');
+
+  
+
+  // probs don't need
+  // function randomIntFromInterval(min, max) {
+  //   return Math.floor(Math.random() * (max - min + 1) + min);
+  // }
 
   //setup a polyphonic sampler
   var keys = new Tone.MultiPlayer({
@@ -128,14 +160,16 @@
     volume : -5,
     fadeOut : 0.1,
   }).toMaster();
+
+  
+  
   
   // init mainSequence & sequenceStore
-  for(var i=0; i < SEQUENCE_SIZE; i++) {
-    sequenceStore[i] = null;
-    sequenceStore2[i] = null;
-    // so we don't have to write it
-    mainSequence[i] = i;
-  }
+  // for(var i=0; i < SEQUENCE_SIZE; i++) {
+  //   sequenceStore[i] = null;
+  //   sequenceStore2[i] = null;
+  //   // so we don't have to write it
+  // }
 
   // init buttons
   [].forEach.call(buttons, function(button, idx) {

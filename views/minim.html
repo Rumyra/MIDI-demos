@@ -17,6 +17,7 @@
   <meta name="description" content="">
 
   <link type="text/css" href="app.css" rel="stylesheet" media="screen" />
+  <script src="scripts/pusher.min.js"></script>
   
   <!--include if you want modenizr (rest of scripts just before </body>)
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
@@ -27,7 +28,7 @@
 <body>
 <div class="wrapper page-minim">
 
-<div id="form-name">
+<!-- <div id="form-name">
   <form method="post" action="/" class="form-small">
     <fieldset><legend>Hello, what's your name?</legend>
       <div class="form-field">
@@ -37,10 +38,10 @@
       <input type="submit" value="Let's Go!" />
     </fieldset>
   </form>
-</div>
+</div> -->
 
 <div id="minim-show">
-  <p>Hi 'name here', you're the 'track here' track! See yourself on the big screen and press below to play your sound.</p>
+  <p>Hi there, you can now play on the big screen! Press below to play your sound.</p>
 
   <section class="minim">
     <div class="buttons">
@@ -58,34 +59,51 @@
 
 
 </div>
+<div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
 <script type="text/javascript" src="app.js"></script>
 
 <script type="text/javascript">
-  //setup a polyphonic sampler
-    var keys = new Tone.MultiPlayer({
-      urls : {
-        "A" : "./audio/casio/A1.mp3",
-        "C#" : "./audio/casio/Cs2.mp3",
-        "E" : "./audio/casio/E2.mp3",
-        "F#" : "./audio/casio/Fs2.mp3",
-      },
-      volume : -10,
-      fadeOut : 0.1,
-    }).toMaster();
-    //the notes
-    var noteNames = ["F#", "E", "C#", "A"];
-    var loop = new Tone.Sequence(function(time, col){
-      var column = matrix1.matrix[col];
-      for (var i = 0; i < 4; i++){
-        if (column[i] === 1){
-          //slightly randomized velocities
-          var vel = Math.random() * 0.5 + 0.5;
-          keys.start(noteNames[i], time, 0, "32n", 0, vel);
-        }
-      }
-    }, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], "16n");
-    Tone.Transport.start();
+  // pusher
+  var pushConfig = document.getElementById('pusher').dataset;
+  var pusher = new Pusher(pushConfig.key, {encrypted:true});
+  Pusher.channel_auth_endpoint = pushConfig.thisurl+'/pusher/auth';
+  pusher.connection.bind('state_change', function(states) {
+      console.log("Pusher's current state is " + states.current);
+  });
+  // subscribe to channel
+  var channel = pusher.subscribe('presence-stepSeq_channel');
+  var meId;
 
+  channel.bind('pusher:member_added', function(member) {
+    console.log('theres a new member -'+member.id);
+    meId = member.id;
+  });
+
+  var buttons = document.querySelectorAll('.buttons button'),
+  sequenceStore = [];
+
+  function setButtonState(store, button) {
+    var buttonEl = button;
+
+    if (buttonEl.dataset.state === "off") {
+      buttonEl.dataset.state = "on";
+      store[parseInt(buttonEl.dataset.number)] = 'C5';
+    } else {
+      buttonEl.dataset.state = "off";
+      store[parseInt(buttonEl.dataset.number)] = null;
+    }
+  }
+
+  [].forEach.call(buttons, function(button, idx) {
+    button.addEventListener('click', function() {
+      setButtonState(sequenceStore, button);
+      channel.trigger('client-buttonPressed', {
+        user_id: meId,
+        sequenceStore: sequenceStore
+      });
+    }, false);
+    button.dataset.number = idx;
+  });
   
 </script>
 
