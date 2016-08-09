@@ -45,14 +45,14 @@
 
   <section class="minim">
     <div class="buttons">
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
     </div>
   </section>
 </div>
@@ -74,9 +74,9 @@
   var channel = pusher.subscribe('presence-stepSeq_channel');
   var meId;
 
-  channel.bind('pusher:member_added', function(member) {
-    console.log('theres a new member -'+member.id);
-    meId = member.id;
+  // Once subscribed, store the UID
+  channel.bind('pusher:subscription_succeeded', function() {
+     meId = channel.members.me.id;
   });
 
   var buttons = document.querySelectorAll('.buttons button'),

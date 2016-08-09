@@ -78,6 +78,7 @@
   var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"],
     SEQUENCE_SIZE = 8,
     mainSequence = [],
+    sequences = {},
     wrapper = document.querySelector('.wrapper');
 
   function setButtonState(store, button) {
@@ -92,49 +93,61 @@
     }
   }
 
+  function updateMinimViewByUID(uid) {
+    var minim = document.getElementById(uid);
+    var buttons = minim.querySelectorAll('button');
+    var sequence = sequences[uid];
+
+    sequence.forEach(function(step, idx) {
+      var button = buttons[idx];
+
+      if(step === null) {
+        button.dataset.state = "off";
+      } else {
+        button.dataset.state = "on";
+      }
+    });
+  }
+
   function createMinim(uid) {
+    // Clone DOM elements
     var masterMinim = document.getElementById('minim-main');
     var dupMinim = masterMinim.cloneNode(true);
     dupMinim.setAttribute('id', uid);
-    return dupMinim;
-  }
 
-  function setUpSeqs(totalUsers, seqSize) {
-    for(var i=0; i < totalUsers; i++) {
+    // Use UID to make a sequence store for the user
+    sequences[uid] = new Array(SEQUENCE_SIZE);
 
-      var sequence = [];
-
-      for(var j=0; j < max_sequence_length; j++) {
-        sequence[j] = null;
-      }
-
-      sequenceStores[i] = sequence;
-      mainSequence[i] = i;
+    //initialise the sequence
+    for(var i=0; i < SEQUENCE_SIZE; i++) {
+      sequences[uid][i] = null;
     }
+
+    return dupMinim;
   }
 
   // when a user joins add a new minim
   channel.bind('pusher:member_added', function(member) {
-    console.log('theres a new member -'+member.id);
+    console.log('theres a new member -' + member.id);
     var newMinim = createMinim(member.id);
     wrapper.appendChild(newMinim);
-
   });
+
   // when they press stuff do update the right sequencer
   channel.bind('client-buttonPressed', function(data) {
-    //we get userid - which is minim id and sequence store
-  })
+    sequences[data.user_id] = data.sequenceStore;
+    updateMinimViewByUID(data.user_id);
+  });
+
   // when a user disconnects remove minim
   channel.bind('pusher:member_removed', function(member) {
     var remMinim = document.getElementById(member.id);
-    remMinim.remove();
+    if(remMinim) remMinim.parentNode.removeChild(remMinim);
   });
-  
 
 
   var buttons = document.querySelectorAll('#minim-main .buttons button');
   var buttons2 = document.querySelectorAll('#minim-main2 .buttons button');
-
   
 
   // probs don't need
@@ -188,7 +201,26 @@
   });
 
   var loop = new Tone.Sequence(function(time, col) {
-      if(sequenceStore[col] !== null) {
+      // loop over all client sequences
+      for(var key in sequences) {
+        var sequence = sequences[key];
+        var minim = document.getElementById(key);
+        var buttons = minim.querySelectorAll('button');
+
+        if(sequence[col] !== null) {
+          //slightly randomized velocities
+          var vel = Math.random() * 0.5 + 0.5;
+          keys.start(noteNames[9], time, 0, "16n", 0, vel);
+        }
+
+        [].forEach.call(buttons, function(button) {
+          button.classList.remove('current');
+        });
+
+        buttons[col].classList.add('current');
+      }
+
+      /*if(sequenceStore[col] !== null) {
         //slightly randomized velocities
         var vel = Math.random() * 0.5 + 0.5;
         keys.start(noteNames[6], time, 0, "16n", 0, vel);
@@ -210,9 +242,9 @@
 
       
       buttons[col].classList.add('current');
-      buttons2[col].classList.add('current');
+      buttons2[col].classList.add('current');*/
 
-  }, mainSequence, "8n");
+  }, [0, 1, 2, 3, 4, 5, 6, 7], "8n");
 
   Tone.Transport.start();
   loop.start();
