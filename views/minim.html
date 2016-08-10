@@ -72,11 +72,12 @@
   });
   // subscribe to channel
   var channel = pusher.subscribe('presence-stepSeq_channel');
-  var meId;
+  var meId, meNum;
 
   // Once subscribed, store the UID
   channel.bind('pusher:subscription_succeeded', function() {
      meId = channel.members.me.id;
+     meNum = channel.members.count;
   });
 
   var buttons = document.querySelectorAll('.buttons button'),
@@ -99,6 +100,7 @@
       setButtonState(sequenceStore, button);
       channel.trigger('client-buttonPressed', {
         user_id: meId,
+        user_count: meNum, //should be hue
         sequenceStore: sequenceStore
       });
     }, false);

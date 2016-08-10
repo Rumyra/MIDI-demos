@@ -36,18 +36,39 @@ html { -webkit-text-size-adjust: 100%; }
     background-color:var(--lessDarkGrey);
     background: linear-gradient(20deg, var(--lessDarkGrey), var(--darkGrey));
     border:1px solid var(--lightGrey); border-radius:1px;
-    box-shadow: 0px 0px 4px var(--black);
+    box-shadow: 0px 0px 1.5em var(--black);
   };
+
+  --info: {
+    padding: var(--unit);
+    background-color: color(var(--lessDarkGrey) alpha(-20%));
+    background: linear-gradient(20deg, color(var(--lessDarkGrey) alpha(-10%)), color(var(--darkGrey) alpha(-20%)));
+    border:1px solid color(var(--lightGrey) alpha(-20%)); border-radius:1px;
+    box-shadow: 0px 0px 1.5em var(--black);
+  }
+
+  --padStyle: {
+    background-color: hsla(340, 70%, 60%, 0.9);
+    background-image:
+      linear-gradient(0deg, color(white alpha(-80%)) 10%, transparent 30%),
+      linear-gradient(90deg, color(white alpha(-80%)) 10%, transparent 30%),
+      linear-gradient(180deg, color(white alpha(-80%)) 10%, transparent 30%),
+      linear-gradient(270deg, color(white alpha(-80%)) 10%, transparent 30%);
+    box-shadow: 1px 1px 1.5em var(--black);
+    border:1px solid var(--black); border-radius:1px;
+  }
 }
 
 body {
-  overflow: auto;
+  overflow: auto; padding: var(--unit);
   background-color: var(--darkGrey);
   font-family: sans-serif;
   font-size: 100%;
   color: var(--lightGrey);
   line-height: 1.4;
 }
+a {color: var(--lightGrey);}
+a:hover {text-decoration: none;}
 
 .page-index {
   height: 90vh;
@@ -100,7 +121,6 @@ body {
 }
 
 .minim {
-  width: calc(var(--unit)*14);
   padding: var(--unit);
   @apply --interface;
   & h2 {
@@ -108,29 +128,37 @@ body {
     transform:rotate(-90deg) translateX(-120px) translateY(-40px);
   }
   & .buttons {
-    display: flex; flex-wrap: wrap;
+    display: flex; justify-content: space-around;
   }
   & button {
     height: calc(var(--unit)*4); width: calc(var(--unit)*4);
     margin:calc(var(--unit)/2);
-    background-color: purple;
+    @apply --padStyle;
   }
   & button[data-state="on"] {
-    background-color: white;
+    background-color: hsla(340, 70%, 80%, 0.9);
   }
   & button.current {
-    border:2px solid var(--lightGrey);
+    box-shadow: inset 0 0 1.5em white;
   }
 }
 .page-synth {
-  & .minim {
-    padding-top:0px;
-    padding-left: calc(var(--unit)*2);
+  .info {
+    @apply --info;
+  }
+
+  & .buttons {
+    flex-wrap: nowrap;
   }
   
 }
 .page-minim {
-  
+  & .minim {
+    width: calc(var(--unit)*14);
+  }
+  & .buttons {
+    flex-wrap: wrap;
+  }
 }
 
 

@@ -24,13 +24,15 @@ html { -webkit-text-size-adjust: 100%; }
 /* legacy support */
 [hidden] { display: none; }
 body {
-  overflow: auto;
+  overflow: auto; padding: 1.5em;
   background-color: #222;
   font-family: sans-serif;
   font-size: 100%;
   color: #aaa;
   line-height: 1.4;
 }
+a {color: #aaa;}
+a:hover {text-decoration: none;}
 .page-index {
   height: 90vh;
   display: -webkit-box;
@@ -53,7 +55,7 @@ body {
     background: linear-gradient(20deg, #333, #222);
     border: 1px solid #aaa;
     border-radius: 1px;
-    box-shadow: 0px 0px 4px #111;
+    box-shadow: 0px 0px 1.5em #111;
     color: #aaa;
     text-decoration: none;
     text-align: center;
@@ -106,14 +108,13 @@ body {
     box-shadow: 1px 1px darkgrey;
 }
 .minim {
-  width: 21em;
   padding: 1.5em;
   background-color: #333;
   background: -webkit-linear-gradient(70deg, #333, #222);
   background: linear-gradient(20deg, #333, #222);
   border: 1px solid #aaa;
   border-radius: 1px;
-  box-shadow: 0px 0px 4px #111
+  box-shadow: 0px 0px 1.5em #111
 }
 .minim h2 {
     -webkit-transform-origin: 0 0;
@@ -125,30 +126,56 @@ body {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
 }
 .minim button {
     height: 6em;
     width: 6em;
     margin: 0.75em;
-    background-color: purple;
+    background-color: hsla(340, 70%, 60%, 0.9);
+    background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
+      -webkit-linear-gradient(left, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
+      -webkit-linear-gradient(top, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
+      -webkit-linear-gradient(right, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%);
+    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
+      linear-gradient(270deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%);
+    box-shadow: 1px 1px 1.5em #111;
+    border: 1px solid #111;
+    border-radius: 1px;
 }
 .minim button[data-state="on"] {
-    background-color: white;
+    background-color: hsla(340, 70%, 80%, 0.9);
 }
 .minim button.current {
-    border: 2px solid #aaa;
+    box-shadow: inset 0 0 1.5em white;
 }
 .page-synth {
+  .info {
+    padding: 1.5em;
+    background-color: rgba(51, 51, 51, 0.8);
+    background: -webkit-linear-gradient(70deg, rgba(51, 51, 51, 0.9), rgba(34, 34, 34, 0.8));
+    background: linear-gradient(20deg, rgba(51, 51, 51, 0.9), rgba(34, 34, 34, 0.8));
+    border: 1px solid rgba(170, 170, 170, 0.8);
+    border-radius: 1px;
+    box-shadow: 0px 0px 1.5em #111;
+  }
   
 }
-.page-synth .minim {
-    padding-top: 0px;
-    padding-left: 3em;
+.page-synth .buttons {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
 }
 .page-minim {
-  
+}
+.page-minim .minim {
+    width: 21em;
+}
+.page-minim .buttons {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
 }
 
 

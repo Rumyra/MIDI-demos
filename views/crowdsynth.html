@@ -29,36 +29,26 @@
 
 <body>
 <div class="wrapper page-synth">
-<a id="url-join" href="{{JOIN_URL}}">{{JOIN_URL}}</a>
+<p class="info url-join"><a href="{{JOIN_URL}}" target="_blank">{{JOIN_URL}}</a></p>
 
-<section class="minim" id="minim-main">
-  <div class="buttons">
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-  </div>
-</section>
+<div class="step-seq">
 
-<section class="minim" id="minim-main2">
-  <div class="buttons">
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-    <button data-state="off"></button>
-  </div>
-</section>
-
-
+  <section class="minim" id="minim-main" data-note="0">
+    <div class="buttons">
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+      <button data-state="off"></button>
+    </div>
+  </section>
 </div>
+
+<p class="info creds">Made by <a href="">@rumyra</a> and <a href="">@2_xaa</a> with <a href="">tone.js</a> and <a href="">Pusher</a></p>
+</div><!--wrapper-->
 <div id="pusher" data-key="{{PUSHKEY}}" data-thisurl="{{THIS_URL}}"></div>
 <script type="text/javascript" src="app.js"></script>
 
@@ -77,9 +67,10 @@
   // vars
   var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"],
     SEQUENCE_SIZE = 8,
-    mainSequence = [],
+    // mainSequence = [],
     sequences = {},
-    wrapper = document.querySelector('.wrapper');
+    wrapper = document.querySelector('.step-seq'),
+    mainButtons = document.querySelectorAll('#minim-main .buttons button');
 
   function setButtonState(store, button) {
     var buttonEl = button;
@@ -109,11 +100,12 @@
     });
   }
 
-  function createMinim(uid) {
+  function createMinim(uid, count) {
     // Clone DOM elements
     var masterMinim = document.getElementById('minim-main');
     var dupMinim = masterMinim.cloneNode(true);
     dupMinim.setAttribute('id', uid);
+    dupMinim.setAttribute('data-note', (count%11)-1);
 
     // Use UID to make a sequence store for the user
     sequences[uid] = new Array(SEQUENCE_SIZE);
@@ -125,14 +117,27 @@
 
     return dupMinim;
   }
+  //instigate first minim
+  sequences['minim-main'] = new Array(SEQUENCE_SIZE);
 
+  //initialise the sequence
+  for(var i=0; i < SEQUENCE_SIZE; i++) {
+    sequences['minim-main'][i] = null;
+  }
   // when a user joins add a new minim
   channel.bind('pusher:member_added', function(member) {
     console.log('theres a new member -' + member.id);
-    var newMinim = createMinim(member.id);
+    var newMinim = createMinim(member.id, channel.members.count);
     wrapper.appendChild(newMinim);
   });
 
+  // bind event to first minim
+  [].forEach.call(mainButtons, function(button, idx) {
+    button.addEventListener('click', function() {
+      setButtonState(sequences['minim-main'], button);
+    }, false);
+    button.dataset.number = idx;
+  });
   // when they press stuff do update the right sequencer
   channel.bind('client-buttonPressed', function(data) {
     sequences[data.user_id] = data.sequenceStore;
@@ -145,16 +150,6 @@
     if(remMinim) remMinim.parentNode.removeChild(remMinim);
     delete sequences[member.id];
   });
-
-
-  var buttons = document.querySelectorAll('#minim-main .buttons button');
-  var buttons2 = document.querySelectorAll('#minim-main2 .buttons button');
-  
-
-  // probs don't need
-  // function randomIntFromInterval(min, max) {
-  //   return Math.floor(Math.random() * (max - min + 1) + min);
-  // }
 
   //setup a polyphonic sampler
   var keys = new Tone.MultiPlayer({
@@ -175,31 +170,6 @@
     fadeOut : 0.1,
   }).toMaster();
 
-  
-  
-  
-  // init mainSequence & sequenceStore
-  // for(var i=0; i < SEQUENCE_SIZE; i++) {
-  //   sequenceStore[i] = null;
-  //   sequenceStore2[i] = null;
-  //   // so we don't have to write it
-  // }
-
-  // init buttons
-  [].forEach.call(buttons, function(button, idx) {
-    button.addEventListener('click', function() {
-      setButtonState(sequenceStore, button);
-    }, false);
-    button.dataset.number = idx;
-  });
-
-  // init buttons2
-  [].forEach.call(buttons2, function(button, idx) {
-    button.addEventListener('click', function() {
-      setButtonState(sequenceStore2, button);
-    }, false);
-    button.dataset.number = idx;
-  });
 
   var loop = new Tone.Sequence(function(time, col) {
       // loop over all client sequences
@@ -208,13 +178,14 @@
           var sequence = sequences[key];
           var minim = document.getElementById(key);
           var buttons = minim.querySelectorAll('button');
+          var noteId = parseInt(minim.dataset.note, 10);
+          console.log(noteId);
 
           if(sequence[col] !== null) {
             //slightly randomized velocities
             var vel = Math.random() * 0.5 + 0.5;
-            keys.start(noteNames[9], time, 0, "16n", 0, vel);
+            keys.start(noteNames[noteId], time, 0, "16n", 0, vel);
           }
-
           [].forEach.call(buttons, function(button) {
             button.classList.remove('current');
           });
@@ -224,30 +195,6 @@
       } catch(e) {
         // do nothing :^)
       }
-
-      /*if(sequenceStore[col] !== null) {
-        //slightly randomized velocities
-        var vel = Math.random() * 0.5 + 0.5;
-        keys.start(noteNames[6], time, 0, "16n", 0, vel);
-      }
-
-      if(sequenceStore2[col] !== null) {
-        //slightly randomized velocities
-        var vel = Math.random() * 0.5 + 0.5;
-        keys.start(noteNames[9], time, 0, "16n", 0, vel);
-      }
-
-      [].forEach.call(buttons, function(button) {
-        button.classList.remove('current');
-      });
-
-      [].forEach.call(buttons2, function(button) {
-        button.classList.remove('current');
-      });
-
-      
-      buttons[col].classList.add('current');
-      buttons2[col].classList.add('current');*/
 
   }, [0, 1, 2, 3, 4, 5, 6, 7], "8n");
 
