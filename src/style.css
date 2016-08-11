@@ -61,6 +61,7 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   overflow: auto; padding: var(--unit);
+  box-sizing: border-box;
   background-color: var(--darkGrey);
   font-family: sans-serif;
   font-size: 100%;
@@ -84,13 +85,15 @@ a:hover {text-decoration: none;}
   & a:hover {background: linear-gradient(20deg, var(--darkGrey), var(--lessDarkGrey));}
 }
 
+/*-----------------------------*/
 .page-piano {
-  height: 100vh;
+  /*height: 96vh;*/
   display: flex; flex-direction: column;
 }
 #midi-data {
-  height: 80vh; border:1px solid green;
+  height: 90vh; border:1px solid green;
   position: relative;
+  & h2 {margin-bottom:30%;}
   & p {
     position: absolute; bottom: var(--unit);
   }
@@ -120,6 +123,7 @@ a:hover {text-decoration: none;}
   /*.key-last {position:absolute; top:0px; right:0px;}*/
 }
 
+/*-------------------------------*/
 .minim {
   padding: var(--unit);
   @apply --interface;
