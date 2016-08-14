@@ -29,7 +29,7 @@
 
 <body>
 <div class="wrapper page-synth">
-<p class="info url-join"><a href="{{JOIN_URL}}" target="_blank">{{JOIN_URL}}</a></p>
+<p class="info url-join">Join in! <a href="{{JOIN_URL}}" target="_blank">{{JOIN_URL}}</a></p>
 
 <div class="step-seq">
 
@@ -45,6 +45,8 @@
       <button data-state="off"></button>
     </div>
   </section>
+
+  
 </div>
 
 <p class="info creds">Made by <a href="">@rumyra</a> and <a href="">@2_xaa</a> with <a href="">tone.js</a> and <a href="">Pusher</a></p>
@@ -106,6 +108,12 @@
     var dupMinim = masterMinim.cloneNode(true);
     dupMinim.setAttribute('id', uid);
     dupMinim.setAttribute('data-note', (count%11)-1);
+    var colour = (count*10)<360 ? (count*10) : (count%360)*10;
+    var dupButtons = dupMinim.getElementsByTagName('button');
+    console.log(dupButtons);
+    for (i=0; i<dupButtons.length; i++) {
+        dupButtons[i].style.backgroundColor = 'hsla('+colour+', 70%, 55%, 0.9)';
+      }
 
     // Use UID to make a sequence store for the user
     sequences[uid] = new Array(SEQUENCE_SIZE);

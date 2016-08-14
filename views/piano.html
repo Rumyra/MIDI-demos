@@ -36,7 +36,7 @@
     <h2>Data</h2>
   </section>
 
-  <!-- <div class="instrument" id="keyboard">
+  <div class="instrument" id="keyboard">
     <b class="key-af" data-note="56">Ab</b>
     <i class="key-a" data-note="57">A</i>
     <b class="key-bf" data-note="58">Bb</b>
@@ -52,7 +52,7 @@
     <b class="key-af" data-note="68">Ab</b>
     <i class="key-a" data-note="69">A</i>
     <b class="key-bf key-last" data-note="70">Bb</b>
-  </div> --><!--instrument-->
+  </div><!--instrument-->
 
 </div>
 <p class="creds">Made by <a href="">@rumyra</a></p>
@@ -77,12 +77,17 @@
     this.dataEl = this.createDataEl(this.midiData, this.left, this.note);
     this.screen.appendChild(this.dataEl);
     this.changeDataToEmoji(this.dataEl, this.note);
+    this.changeEmojiToBall(this.dataEl);
   };
 
   PianoAnim.prototype.changeDataToEmoji = function(pEl, note) {
-    this.para = pEl;
-    this.emoji = this.encodeData(note);
-    this.para.textContent = this.emoji;
+    var para = pEl;
+    var emoji = this.encodeData(note);
+    var firstMorph = setTimeout(function() {
+      para.textContent = emoji;
+      para.style.textShadow = '0px 0px 1.5em hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)'
+    }, 2000);
+    
   }
 
   PianoAnim.prototype.createDataEl = function(text,left,note) {
@@ -94,19 +99,33 @@
   }
 
   PianoAnim.prototype.encodeData = function(note) {
-    var decoder = new TextDecoder();
-    var byteArray = new Uint8Array([144,note,64]);
-    var emoji = decoder.decode(byteArray,{stream:true});
+    // thank you Max!
+    var a = 144 + 96; // 144 = MIDI noteOn
+    var b = 159; // magical part for this range of emoji
+    var c = parseInt(this.note,10) + 85; // Puts us in the correct range
+    var d = 128; // More emoji range magic
+
+    var onArray = new Uint8Array([a, b, c, d]);
+    // var emoji = document.createTextNode(decoder.decode(onArray));
+    var emoji = decoder.decode(onArray, {stream: true});
     return emoji;
+  }
+
+  PianoAnim.prototype.changeEmojiToBall = function(pEl) {
+    var para = pEl;
+    var secondMorph = setTimeout(function() {
+      para.textContent = '******';
+    }, 4000);
   }
 
   var anim = new PianoAnim(animScreen);
 
-  // keyboard.addEventListener("click", function(event) {
-  //   if (event.target.nodeName == "I" || "B")
-  //     console.log("Clicked", event.target);
-  //     anim.displayDataEl(event.target);
-  // });
+  keyboard.addEventListener("click", function(event) {
+    if (event.target.nodeName == "I" || "B")
+      console.log("Clicked", event.target);
+      anim.displayDataEl(event.target);
+  });
+
 
 
 // MIDI CONTROLLER----------------------------

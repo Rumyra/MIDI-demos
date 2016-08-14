@@ -23,11 +23,23 @@ audio, canvas, video { display: inline-block; }
 html { -webkit-text-size-adjust: 100%; }
 /* legacy support */
 [hidden] { display: none; }
+/*@font-face {
+  font-family: "Montserrat";
+  font-weight: normal;
+  font-style: normal;
+  src: url("./public/fonts/Montserrat/Montserrat-Regular.ttf") format("truetype"); 
+}
+@font-face {
+  font-family: "Montserrat";
+  font-weight: bold;
+  font-style: normal;
+  src: url("./public/fonts/Montserrat/Montserrat-Bold.ttf") format("truetype"); 
+}*/
 body {
   overflow: auto; padding: 1.5em;
   box-sizing: border-box;
   background-color: #222;
-  font-family: sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 100%;
   color: #aaa;
   line-height: 1.4;
@@ -77,11 +89,16 @@ a:hover {text-decoration: none;}
   position: relative
 }
 #midi-data h2 {
-    margin-bottom: 30%;
+    margin-bottom: 30vh;
+    font-size: 4em;
+    color: #333;
 }
 #midi-data p {
     position: absolute;
-    bottom: 1.5em;
+    bottom: 500px;
+    text-align: center;
+    -webkit-animation: moveUp 6s;
+            animation: moveUp 6s;
 }
 #keyboard {
   height: 20vh;
@@ -112,15 +129,17 @@ a:hover {text-decoration: none;}
     background: black;
     box-shadow: 1px 1px darkgrey;
 }
+@-webkit-keyframes moveUp {
+  0% {bottom:20px;}
+  100% {bottom:500px;}
+}
+@keyframes moveUp {
+  0% {bottom:20px;}
+  100% {bottom:500px;}
+}
 /*-------------------------------*/
 .minim {
-  padding: 1.5em;
-  background-color: #333;
-  background: -webkit-linear-gradient(70deg, #333, #222);
-  background: linear-gradient(20deg, #333, #222);
-  border: 1px solid #aaa;
-  border-radius: 1px;
-  box-shadow: 0px 0px 1.5em #111
+  width: 100%
 }
 .minim h2 {
     -webkit-transform-origin: 0 0;
@@ -132,31 +151,38 @@ a:hover {text-decoration: none;}
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -ms-flex-line-pack: justify;
+        align-content: space-between;
 }
 .minim button {
-    height: 6em;
-    width: 6em;
-    margin: 0.75em;
-    background-color: hsla(340, 70%, 60%, 0.9);
-    background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
-      -webkit-linear-gradient(left, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
-      -webkit-linear-gradient(top, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
-      -webkit-linear-gradient(right, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%);
-    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%),
-      linear-gradient(270deg, rgba(255, 255, 255, 0.19999999999999996) 10%, transparent 30%);
-    box-shadow: 1px 1px 1.5em #111;
+    background-color: hsla(340, 70%, 55%, 0.9);
+    /*background-image:
+      linear-gradient(0deg, color(white alpha(-80%)) 10%, transparent 20%),
+      linear-gradient(90deg, color(white alpha(-80%)) 10%, transparent 20%),
+      linear-gradient(180deg, color(white alpha(-80%)) 10%, transparent 20%),
+      linear-gradient(270deg, color(white alpha(-80%)) 10%, transparent 20%);*/
+    box-shadow: 1px 1px 1.5em #111, inset 0 0 1em white;
     border: 1px solid #111;
-    border-radius: 1px;
+    border-radius: 2px;
+    height: 12vh;
 }
 .minim button[data-state="on"] {
-    background-color: hsla(340, 70%, 80%, 0.9);
+    background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4));
+    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4));
 }
 .minim button.current {
-    box-shadow: inset 0 0 1.5em white;
+    border: 4px solid rgba(255, 255, 255, 0.9);
+}
+#minim-main {
+  -webkit-box-flex: 3;
+      -ms-flex-positive: 3;
+          flex-grow: 3
+}
+#minim-main button {
+    width: 11vw;
 }
 .page-synth {
   .info {
@@ -170,18 +196,47 @@ a:hover {text-decoration: none;}
   }
   
 }
+.page-synth .step-seq {
+    height: 90vh;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -ms-flex-line-pack: stretch;
+        align-content: stretch;
+}
+.page-synth .minim {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+}
 .page-synth .buttons {
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
 }
+.page-synth button {
+    width: 10vw;
+}
 .page-minim {
 }
-.page-minim .minim {
-    width: 21em;
+.page-minim p {
+    margin-bottom: 1.5em;
+    text-align: center;
 }
 .page-minim .buttons {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
+}
+.page-minim button {
+    width: 20vw;
+    height: 10vw;
+    margin-bottom: 1.5em;
 }
 
 

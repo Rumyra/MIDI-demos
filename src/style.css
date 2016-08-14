@@ -24,6 +24,19 @@ html { -webkit-text-size-adjust: 100%; }
 /* legacy support */
 [hidden] { display: none; }
 
+/*@font-face {
+  font-family: "Montserrat";
+  font-weight: normal;
+  font-style: normal;
+  src: url("./public/fonts/Montserrat/Montserrat-Regular.ttf") format("truetype"); 
+}
+@font-face {
+  font-family: "Montserrat";
+  font-weight: bold;
+  font-style: normal;
+  src: url("./public/fonts/Montserrat/Montserrat-Bold.ttf") format("truetype"); 
+}*/
+
 :root {
   --lightGrey: #aaa;
   --darkGrey: #222;
@@ -45,25 +58,29 @@ html { -webkit-text-size-adjust: 100%; }
     background: linear-gradient(20deg, color(var(--lessDarkGrey) alpha(-10%)), color(var(--darkGrey) alpha(-20%)));
     border:1px solid color(var(--lightGrey) alpha(-20%)); border-radius:1px;
     box-shadow: 0px 0px 1.5em var(--black);
-  }
+  };
 
   --padStyle: {
-    background-color: hsla(340, 70%, 60%, 0.9);
+    background-color: hsla(340, 70%, 55%, 0.9);
+    /*background-image:
+      linear-gradient(0deg, color(white alpha(-80%)) 10%, transparent 20%),
+      linear-gradient(90deg, color(white alpha(-80%)) 10%, transparent 20%),
+      linear-gradient(180deg, color(white alpha(-80%)) 10%, transparent 20%),
+      linear-gradient(270deg, color(white alpha(-80%)) 10%, transparent 20%);*/
+    box-shadow: 1px 1px 1.5em var(--black), inset 0 0 1em white;
+    border:1px solid var(--black); border-radius:2px;
+  };
+  --padStyleOn: {
     background-image:
-      linear-gradient(0deg, color(white alpha(-80%)) 10%, transparent 30%),
-      linear-gradient(90deg, color(white alpha(-80%)) 10%, transparent 30%),
-      linear-gradient(180deg, color(white alpha(-80%)) 10%, transparent 30%),
-      linear-gradient(270deg, color(white alpha(-80%)) 10%, transparent 30%);
-    box-shadow: 1px 1px 1.5em var(--black);
-    border:1px solid var(--black); border-radius:1px;
-  }
+      linear-gradient(0deg, color(white alpha(-60%)), color(white alpha(-60%)));
+  };
 }
 
 body {
   overflow: auto; padding: var(--unit);
   box-sizing: border-box;
   background-color: var(--darkGrey);
-  font-family: sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 100%;
   color: var(--lightGrey);
   line-height: 1.4;
@@ -93,9 +110,14 @@ a:hover {text-decoration: none;}
 #midi-data {
   height: 90vh; border:1px solid green;
   position: relative;
-  & h2 {margin-bottom:30%;}
+  & h2 {
+    margin-bottom:30vh;
+    font-size: 4em; color: var(--lessDarkGrey);
+  }
   & p {
-    position: absolute; bottom: var(--unit);
+    position: absolute; bottom: 500px;
+    text-align: center;
+    animation: moveUp 6s;
   }
 }
 #keyboard {
@@ -122,46 +144,69 @@ a:hover {text-decoration: none;}
   }
   /*.key-last {position:absolute; top:0px; right:0px;}*/
 }
+@keyframes moveUp {
+  0% {bottom:20px;}
+  100% {bottom:500px;}
+}
 
 /*-------------------------------*/
 .minim {
-  padding: var(--unit);
-  @apply --interface;
+  width: 100%;
   & h2 {
     transform-origin: 0 0;
     transform:rotate(-90deg) translateX(-120px) translateY(-40px);
   }
   & .buttons {
-    display: flex; justify-content: space-around;
+    display: flex; justify-content: space-between; align-content: space-between;
   }
   & button {
-    height: calc(var(--unit)*4); width: calc(var(--unit)*4);
-    margin:calc(var(--unit)/2);
     @apply --padStyle;
+    height: 12vh;
+
   }
   & button[data-state="on"] {
-    background-color: hsla(340, 70%, 80%, 0.9);
+    @apply --padStyleOn;
   }
   & button.current {
-    box-shadow: inset 0 0 1.5em white;
+    border: 4px solid color(white alpha(-10%));
+  }
+}
+#minim-main {
+  flex-grow: 3;
+  & button {
+    width:11vw;
   }
 }
 .page-synth {
   .info {
     @apply --info;
   }
-
+  & .step-seq {
+    height:90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: stretch;
+  }
+  & .minim {
+    flex-grow: 1;
+  }
   & .buttons {
     flex-wrap: nowrap;
+  }
+  & button {
+    width:10vw;
   }
   
 }
 .page-minim {
-  & .minim {
-    width: calc(var(--unit)*14);
-  }
+  & p {margin-bottom: var(--unit); text-align: center;}
   & .buttons {
     flex-wrap: wrap;
+  }
+  & button {
+    width:20vw; height:10vw;
+    margin-bottom: var(--unit);
   }
 }
 

@@ -41,7 +41,7 @@
 </div> -->
 
 <div id="minim-show">
-  <p>Hi there, you can now play on the big screen! Press below to play your sound.</p>
+  <p>Hi there, you're on the big screen! Press below to play your sound.</p>
 
   <section class="minim">
     <div class="buttons">
@@ -72,16 +72,19 @@
   });
   // subscribe to channel
   var channel = pusher.subscribe('presence-stepSeq_channel');
-  var meId, meNum;
+  var meId, meCol,
+    buttons = document.querySelectorAll('.buttons button'),
+    sequenceStore = Array(8);
 
   // Once subscribed, store the UID
   channel.bind('pusher:subscription_succeeded', function() {
-     meId = channel.members.me.id;
-     meNum = channel.members.count;
+      meId = channel.members.me.id;
+      meCol = (channel.members.count*10)<360 ? (channel.members.count)*10 : (channel.members.count%360)*10;
+      for (i=0; i<buttons.length; i++) {
+        buttons[i].style.backgroundColor = 'hsla('+meCol+', 70%, 55%, 0.9)';
+      }
+      console.log(meCol);
   });
-
-  var buttons = document.querySelectorAll('.buttons button'),
-  sequenceStore = Array(8);
 
   function setButtonState(store, button) {
     var buttonEl = button;
@@ -100,7 +103,6 @@
       setButtonState(sequenceStore, button);
       channel.trigger('client-buttonPressed', {
         user_id: meId,
-        user_count: meNum, //should be hue
         sequenceStore: sequenceStore
       });
     }, false);
