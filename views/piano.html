@@ -36,7 +36,7 @@
     <h2>Data</h2>
   </section>
 
-  <div class="instrument" id="keyboard">
+  <!--<div class="instrument" id="keyboard">
     <b class="key-af" data-note="56">Ab</b>
     <i class="key-a" data-note="57">A</i>
     <b class="key-bf" data-note="58">Bb</b>
@@ -53,9 +53,9 @@
     <i class="key-a" data-note="69">A</i>
     <b class="key-bf key-last" data-note="70">Bb</b>
   </div><!--instrument-->
-
-</div>
 <p class="creds">Made by <a href="">@rumyra</a></p>
+</div>
+
 <script type="text/javascript" src="app.js"></script>
 
 <script type="text/javascript">
@@ -85,14 +85,16 @@
     var emoji = this.encodeData(note);
     var firstMorph = setTimeout(function() {
       para.textContent = emoji;
-      para.style.textShadow = '0px 0px 1.5em hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)'
+      para.classList = 'emoji';
+      para.style.textShadow = '2px 2px 5px hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1), -2px -2px 5px hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)'
     }, 2000);
     
-  }
+  } 
 
   PianoAnim.prototype.createDataEl = function(text,left,note) {
     var dataEl = document.createElement('p');
     dataEl.textContent = text;
+    dataEl.classList = 'data';
     dataEl.style.left = (left-30)+'px';
     dataEl.style.color = 'hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)';
     return dataEl;
@@ -114,18 +116,35 @@
   PianoAnim.prototype.changeEmojiToBall = function(pEl) {
     var para = pEl;
     var secondMorph = setTimeout(function() {
-      para.textContent = '******';
+      para.innerHTML = '<span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span>';
+      para.classList = 'firework';
+      animateFirework(para);
     }, 4000);
   }
 
   var anim = new PianoAnim(animScreen);
 
-  keyboard.addEventListener("click", function(event) {
-    if (event.target.nodeName == "I" || "B")
-      console.log("Clicked", event.target);
-      anim.displayDataEl(event.target);
-  });
+  // keyboard.addEventListener("click", function(event) {
+  //   if (event.target.nodeName == "I" || "B")
+  //     console.log("Clicked", event.target);
+  //     anim.displayDataEl(event.target);
+  // });
 
+  function animateFirework(paraEl) {
+    var spans = paraEl.getElementsByTagName('span');
+    console.log(spans);
+    for (var i=0; i<spans.length; i++) {
+      // spans[i].style.transform = 'rotate('+i*30+'deg) translate(150px, 150px)';
+      spans[i].animate(
+        [{transform: 'rotate('+i*30+'deg) translate(0px, 0px)', opacity: '1'},
+        {transform: 'rotate('+((i*30)+60)+'deg) translate(100px, 100px)', opacity: '0'}],
+        {
+          duration: 1000,
+          iterations: 1
+        }
+      )
+    }
+  }
 
 
 // MIDI CONTROLLER----------------------------
@@ -141,20 +160,27 @@ MIDIAnim.prototype.displayDataEl = function(midiData) {
   this.dataEl = this.createDataEl(this.midiDataString, this.left, this.note);
   this.screen.appendChild(this.dataEl);
   this.changeDataToEmoji(this.dataEl, this.newMidiData);
+  this.changeEmojiToBall(this.dataEl);
 };
 
 MIDIAnim.prototype.createDataEl = function(text,left,note) {
   var dataEl = document.createElement('p');
   dataEl.textContent = text;
-  dataEl.style.left = (left-30)+'px';
+  dataEl.classList = 'data';
+  dataEl.style.left = Math.floor(1.5*(left-30))+'%';
+
   dataEl.style.color = 'hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)';
   return dataEl;
 }
 
 MIDIAnim.prototype.changeDataToEmoji = function(pEl, noteData) {
-  this.para = pEl;
-  this.emoji = this.encodeData(noteData);
-  this.para.textContent = this.emoji;
+  var para = pEl;
+  var emoji = this.encodeData(noteData);
+  var firstMorph = setTimeout(function() {
+    para.textContent = emoji;
+    para.classList = 'emoji';
+    para.style.textShadow = '2px 2px 5px hsla('+( Math.floor(Math.pow(noteData[1],2)/24) )+',50%,50%,1), -2px -2px 5px hsla('+( Math.floor(Math.pow(noteData[1],2)/24) )+',50%,50%,1)'
+  }, 2000);
 }
 
 MIDIAnim.prototype.encodeData = function(someData) {
@@ -173,6 +199,15 @@ MIDIAnim.prototype.encodeData = function(someData) {
   // var emoji = document.createTextNode(decoder.decode(onArray));
   var emoji = decoder.decode(onArray, {stream: true});
   return emoji;
+}
+
+MIDIAnim.prototype.changeEmojiToBall = function(pEl) {
+  var para = pEl;
+  var secondMorph = setTimeout(function() {
+    para.innerHTML = '<span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span>';
+    para.classList = 'firework';
+    animateFirework(para);
+  }, 4000);
 }
 
 
@@ -204,7 +239,7 @@ function gotMIDImessage(messageData) {
 
 
 function onMIDIFailure() {
-  console.warn("Check the freakin cable!! It's always the cable 🙄");
+  console.warn("Check the freakin connection!! It's always the connection 🙄");
 }
 
 </script>
