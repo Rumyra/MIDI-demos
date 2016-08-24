@@ -171,7 +171,7 @@ a:hover {text-decoration: none;}
 
 /*-------------------------------*/
 .minim {
-  width: 100%;
+  width: 100%; overflow: hidden;
   & h2 {
     transform-origin: 0 0;
     transform:rotate(-90deg) translateX(-120px) translateY(-40px);
