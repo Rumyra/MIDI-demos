@@ -115,19 +115,19 @@ a:hover {text-decoration: none;}
 
 /*-----------------------------*/
 .page-piano {
-  /*height: 96vh;*/
-  display: flex; flex-direction: column;
-  & .creds {text-align: right;}
+  height: 92vh;
+  position: relative;
+  & .creds {position: absolute; bottom:-20px; right:0px;}
 }
 #midi-data {
-  /*height: 80vh;*/
+  height: 70vh;
   position: relative;
   & h2 {
     margin-bottom:20vh;
     font-size: 4em; color: var(--lessDarkGrey);
   }
   & p {
-    position: absolute; bottom: 500px;
+    position: absolute; bottom: 900px;
     text-align: center; font-size: 2em;
     animation: moveUp 6s;
   }
@@ -155,10 +155,10 @@ a:hover {text-decoration: none;}
 }
 
 #keyboard {
-  position: relative; bottom:0px; left:50%;
-  margin-left:-1135px; width:2270px;
+  position: absolute; bottom:0px; left:50%;
+  margin-left:-560px; width:1150px;
+  overflow: hidden;
   /*display: flex; justify-content: center; align-items: stretch;*/
-  border:1px solid var(--lightGrey);
   & i, & b {
     display:inline-block;
     position:relative; z-index:5;
@@ -178,7 +178,7 @@ a:hover {text-decoration: none;}
     background:black;
     box-shadow:1px 1px darkgrey;
   }
-  /*.key-last {position:absolute; top:0px; right:0px;}*/
+  & .key-last {position:absolute; top:0px; right:0px;}
 }
 
 

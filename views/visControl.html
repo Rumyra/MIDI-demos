@@ -41,8 +41,6 @@
 
     </form>
 
-    <h4>Rotate your phone to rotate your Brazil.JS</h4>
-
   </article>
 
 <div id="pusher" data-key="{{PUSHKEY}}"></div>
@@ -110,14 +108,14 @@ var rotation = "rotate(0deg) rotate3d(1,0,0, 0deg)";
 //     }
 //   );
 // }, 1000);
-var deviceOrientationData;
-function deviceOrientationHandler(evt) {
-  deviceOrientationData = evt;
-  console.log(deviceOrientationData);
-  rotation = "rotate("+ evt.alpha +"deg) rotate3d(1,0,0, "+ (evt.gamma * -1)+"deg)";
-  imageEl.style.webkitTransform = rotation;
-  imageEl.style.transform = rotation;
-}
+// var deviceOrientationData;
+// function deviceOrientationHandler(evt) {
+//   deviceOrientationData = evt;
+//   console.log(deviceOrientationData);
+//   rotation = "rotate("+ evt.alpha +"deg) rotate3d(1,0,0, "+ (evt.gamma * -1)+"deg)";
+//   imageEl.style.webkitTransform = rotation;
+//   imageEl.style.transform = rotation;
+// }
 // deviceOrientationHandler();
 </script>
 </body>

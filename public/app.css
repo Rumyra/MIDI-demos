@@ -94,16 +94,16 @@ a:hover {text-decoration: none;}
 }
 /*-----------------------------*/
 .page-piano {
-  /*height: 96vh;*/
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column
+  height: 92vh;
+  position: relative
 }
 .page-piano .creds {
-    text-align: right;
+    position: absolute;
+    bottom: -20px;
+    right: 0px;
 }
 #midi-data {
-  /*height: 80vh;*/
+  height: 70vh;
   position: relative
 }
 #midi-data h2 {
@@ -113,7 +113,7 @@ a:hover {text-decoration: none;}
 }
 #midi-data p {
     position: absolute;
-    bottom: 500px;
+    bottom: 900px;
     text-align: center;
     font-size: 2em;
     -webkit-animation: moveUp 6s;
@@ -156,17 +156,20 @@ a:hover {text-decoration: none;}
   }
 }
 #keyboard {
-  position: relative; bottom:0px; left:50%;
-  margin-left:-1135px; width:2270px;
+  position: absolute; bottom:0px; left:50%;
+  margin-left:-560px; width:1150px;
+  overflow: hidden
   /*display: flex; justify-content: center; align-items: stretch;*/
-  border: 1px solid #aaa
-  /*.key-last {position:absolute; top:0px; right:0px;}*/
 }
 #keyboard i, #keyboard b {
     display: inline-block;
     position: relative;
     z-index: 5;
     color: transparent;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 #keyboard i {
     width: 34px;
@@ -182,6 +185,11 @@ a:hover {text-decoration: none;}
     margin: 0px -15px;
     background: black;
     box-shadow: 1px 1px darkgrey;
+}
+#keyboard .key-last {
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 /*-------------------------------*/
 .minim {
