@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico" />
+
+  <!--meta content-->
+  
+  <meta name="author" content="Ruth John (@rumyra)">
+  <meta name="dcterms.rightsHolder" content="Built by Ruth John, United Kingdom, 2015">
+  <title>MIDI Demos | Rumyra</title>
+  <meta name="description" content="">
+
+  <link type="text/css" href="app.css" rel="stylesheet" media="screen" />
+  <script src="scripts/pusher.min.js"></script>
+
+  <script src="scripts/d3.min.js"></script>
+
+</head>
+<body class="page-vismain">
+<audio id="simon" src="Guilt.mp3"></audio>
+<button id="play-audio">Play/Pause Audio</button>
+
+<section id="screen"></section>
+
+<div id="pusher" data-key="{{PUSHKEY}}"></div>
+<script type="text/javascript">
+// pusher stuff
+var pushConfig = document.getElementById('pusher').dataset;
+var pusher = new Pusher(pushConfig.key, {encrypted:true});
+Pusher.channel_auth_endpoint = pushConfig.thisurl+'/pusher/auth';
+pusher.connection.bind('state_change', function(states) {
+    console.log("Pusher's current state is " + states.current);
+});
+// subscribe to channel
+var channel = pusher.subscribe('private-rubies');
+channel.bind('pusher:subscription_succeeded', function() {
+  console.log('subscription succeeded');
+});
+// audio stuff --------------------------------------------
+var simonSoundEl = document.getElementById('simon');
+
+// set up audio context
+var audioContext = (window.AudioContext || window.webkitAudioContext);
+// create audio class
+if (audioContext) {
+  // Web Audio API is available.
+  var audioAPI = new audioContext();
+} else {
+  // Web Audio API is not available. Ask the user to use a supported browser.
+  alert("Oh nos! It appears your browser does not support the Web Audio API, please upgrade or use a different browser");
+}
+// variables
+var audioBuffer,
+    analyserNode = audioAPI.createAnalyser(),
+    frequencyData = new Uint8Array(1024),
+    playButton = document.getElementById('play-audio'),
+    guiltMp3 = audioAPI.createMediaElementSource(simonSoundEl);
+analyserNode.fftSize = 2048;
+var playGuilt = function playGuilt() {
+  guiltMp3.connect(analyserNode);
+  guiltMp3.connect(audioAPI.destination);
+  analyserNode.connect(audioAPI.destination);
+  simonSoundEl.play();
+  animateSvgs();
+}
+//play track
+playButton.onclick = function() {
+  if (simonSoundEl.paused) {
+    playGuilt();
+  } else {
+    simonSoundEl.pause();
+  }
+}
+// logo stuff ----------------------------------------
+function createImage(uniqueID) {
+  var outerDiv = document.createElement('div');
+  outerDiv.setAttribute("id", uniqueID);
+  var theImage = document.createElement('img');
+  theImage.src = "braziljs.svg";
+  outerDiv.appendChild(theImage);
+  return outerDiv;
+}
+function oneGem(id) {
+  this.id = id;
+  this.type = 'yellow';
+  this.view = "rotate(0deg) rotate3d(1,0,0, 0deg)";
+}
+var allGemParams = [],
+  screen = document.getElementById('screen'),
+  firstGem = new oneGem(000);
+// make at least one gem
+allGemParams.push(firstGem);
+// createGem(000, screen);
+function updateGemArray(id, param, value) {
+  for (var i=0; i<allGemParams.length; i++) {
+    if (id === allGemParams[i].id) {
+      switch (param) {
+        case 'img-color':
+          allGemParams[i].type = value;
+        break;
+        case 'view':
+          allGemParams[i].view = value;
+        break;
+      }
+    }
+  }
+}
+channel.bind('client-audience_joined', function(data) {
+  // createGem(data.person, screen);
+  var thisGem = new oneGem(data.person);
+  allGemParams.push(thisGem);
+  restart();
+  updateSvgs();
+});
+channel.bind('client-audience_data', function(data) {
+  updateGemArray(data.person, data.param, data.setting);
+  restart()
+});
+// high 600 - 250 mid 250 - 100 low 100 - 0
+function updateSvgs() {
+  requestAnimationFrame(updateSvgs);
+  // Animation stuff--------------------------------
+  // var allRepeatedEls = document.getElementsByTagName('svg');
+  var totalEls = allGemParams.length;
+  // Simple example of changing opacity & colour -> EDIT THIS!
+  for (var i=0; i<totalEls; i++) {
+    var imgElement = document.getElementById(allGemParams[i].id).children[0];
+    // show correct view
+    if (allGemParams[i].type === 'green') {
+      imgElement.src = 'braziljsGreen.svg';
+    } else if (allGemParams[i].type === 'blue') {
+      imgElement.src = 'braziljsBlue.svg';
+    } else {
+      imgElement.src = 'braziljs.svg';
+    }
+    var rotation = allGemParams[i].view;
+    // imgElement.style.transform = rotation;
+    
+  }
+}
+function animateSvgs() {
+  requestAnimationFrame(animateSvgs);
+  analyserNode.getByteFrequencyData(frequencyData);
+  // Animation stuff--------------------------------
+  // var allRepeatedEls = document.getElementsByTagName('svg');
+  var totalEls = allGemParams.length;
+  // Simple example of changing opacity & colour -> EDIT THIS!
+  for (var i=0; i<totalEls; i++) {
+    var imgElement = document.getElementById(allGemParams[i].id).children[0];
+    
+    var freqDataKey = i*20;
+    if (frequencyData[freqDataKey] > 140){
+      //start animation on element
+      imgElement.style.opacity = "1";
+    } else {
+      imgElement.style.opacity = "0.3";
+    }
+  }
+}
+// d3 stuff -------------------------------------
+// var tempAr = [1,2,3,4,5,6,7];
+// for (var i=0; i<tempAr.length; i++) {
+//   createGem(screen);
+// }
+var allDivs = d3.select("#screen");
+// console.log(allGems);
+// set layout
+var w = window.innerWidth;
+var h = window.innerHeight;
+var force = d3.layout
+  .force()
+  .linkDistance(500)
+  .charge(-150)
+  .nodes(allGemParams)
+  .size([w,h])
+  .on("tick", tick);
+function tick() {
+  d3.selectAll("div.gem").attr("style", function(d) {
+    // console.log(d)
+    return 'left:'+d.x+'px; top: '+d.y+'px;';
+  })
+}
+var nodes = force.nodes();
+var node = allDivs.selectAll("div.gem")
+function restart() {
+  d3.selectAll("div.gem").remove()
+  node.data(nodes).enter().append('div').attr('class', 'gem').html(function(d){
+    return createImage(d.id).outerHTML
+  })
+  force.start();
+}
+restart()
+</script>
+</body>
+</html>

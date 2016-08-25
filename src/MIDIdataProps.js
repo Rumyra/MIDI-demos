@@ -31,5 +31,13 @@ MIDIdataProps.prototype.firework = function() {
   var fireHtml = '<span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span>';
   return fireHtml;
 }
+MIDIdataProps.prototype.createData = function() {
+  var dataEl = document.createElement('p');
+  dataEl.classList = 'data';
+  dataEl.textContent = midiProp.midiOn;
+  dataEl.style.left = midiProp.leftPos;
+  dataEl.style.color = midiProp.colour;
+  return dataEl;
+}
 
 
