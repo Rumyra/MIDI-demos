@@ -163,6 +163,7 @@ a:hover {text-decoration: none;}
     display:inline-block;
     position:relative; z-index:5;
     color: transparent;
+    user-select: none;
   }
   & i {
     width:34px; height:176px;
