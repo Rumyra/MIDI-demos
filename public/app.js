@@ -54,6 +54,11 @@
 	// nothing more needed: index.css will be added to public/app.css now
 	__webpack_require__(2);
 
+	// {function }();
+	// some functions for reuse in the app
+
+	function linearTransform(x1, x2, y1, y2) {}
+
 /***/ },
 /* 2 */
 /***/ function(module, exports) {

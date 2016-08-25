@@ -28,14 +28,20 @@ app.get('/', (req, res) => {
 app.get('/piano', (req, res) => {
   res.render('piano');
 });
-// phone view
+app.get('/data', (req, res) => {
+  res.render('data');
+});
+app.get('/emoji', (req, res) => {
+  res.render('emoji');
+});
+// phone view seq
 app.get('/minim', (req, res) => {
   var thisUrl = req.protocol + '://' + req.get('host');
   req.THIS_URL = thisUrl;
   req.PUSHKEY = process.env.PUSHKEY;
   res.render('minim', req);
 });
-// big screen
+// big screen seq
 app.get('/stepseq', (req, res) => {
   // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   var thisUrl = req.protocol + '://' + req.get('host');
@@ -43,6 +49,22 @@ app.get('/stepseq', (req, res) => {
   req.JOIN_URL = thisUrl+'/minim';
   req.PUSHKEY = process.env.PUSHKEY;
   res.render('crowdsynth', req);
+});
+// phone view vis
+app.get('/vis', (req, res) => {
+  var thisUrl = req.protocol + '://' + req.get('host');
+  req.THIS_URL = thisUrl;
+  req.PUSHKEY = process.env.PUSHKEY;
+  res.render('visControl', req);
+});
+// big screen vis
+app.get('/visual', (req, res) => {
+  // var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  var thisUrl = req.protocol + '://' + req.get('host');
+  req.THIS_URL = thisUrl;
+  req.JOIN_URL = thisUrl+'/minim';
+  req.PUSHKEY = process.env.PUSHKEY;
+  res.render('visual', req);
 });
 
 app.post('/pusher/auth', function(req, res) {

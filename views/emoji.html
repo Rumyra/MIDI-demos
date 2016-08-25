@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico" />
+
+  <!--meta content-->
+  
+  <meta name="author" content="Ruth John (@rumyra)">
+  <meta name="dcterms.rightsHolder" content="Built by Ruth John, United Kingdom, 2015">
+  <title>MIDI Demos | Rumyra</title>
+  <meta name="description" content="">
+
+  <link type="text/css" href="app.css" rel="stylesheet" media="screen" />
+  
+  <!--include if you want modenizr (rest of scripts just before </body>)
+  <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+  -->
+  
+</head>
+
+<body>
+<div class="wrapper page-piano">
+
+  <section id="midi-data">
+    <h2>Data</h2>
+  </section>
+
+  <div class="instrument" id="keyboard">
+    <b class="key-af" data-note="56">Ab</b>
+    <i class="key-a" data-note="57">A</i>
+    <b class="key-bf" data-note="58">Bb</b>
+    <i class="key-b" data-note="59">B</i>
+    <i class="key-c" data-note="60">C</i>
+    <b class="key-cs" data-note="61">C#</b>
+    <i class="key-d" data-note="62">D</i>
+    <b class="key-ef" data-note="63">Eb</b>
+    <i class="key-e" data-note="64">E</i>
+    <i class="key-f" data-note="65">F</i>
+    <b class="key-fs" data-note="66">F#</b>
+    <i class="key-g" data-note="67">G</i>
+    <b class="key-af" data-note="56">Ab</b>
+    <i class="key-a" data-note="57">A</i>
+    <b class="key-bf" data-note="58">Bb</b>
+    <i class="key-b" data-note="59">B</i>
+    <i class="key-c" data-note="60">C</i>
+    <b class="key-cs" data-note="61">C#</b>
+    <i class="key-d" data-note="62">D</i>
+    <b class="key-ef" data-note="63">Eb</b>
+    <i class="key-e" data-note="64">E</i>
+    <i class="key-f" data-note="65">F</i>
+    <b class="key-fs" data-note="66">F#</b>
+    <i class="key-g" data-note="67">G</i>
+    <b class="key-af" data-note="68">Ab</b>
+    <i class="key-a" data-note="69">A</i>
+    <b class="key-bf" data-note="58">Bb</b>
+    <i class="key-b" data-note="59">B</i>
+    <i class="key-c" data-note="60">C</i>
+    <b class="key-cs" data-note="61">C#</b>
+    <i class="key-d" data-note="62">D</i>
+    <b class="key-ef" data-note="63">Eb</b>
+    <i class="key-e" data-note="64">E</i>
+    <i class="key-f" data-note="65">F</i>
+    <b class="key-fs" data-note="66">F#</b>
+    <i class="key-g" data-note="67">G</i>
+    <b class="key-af" data-note="56">Ab</b>
+    <i class="key-a" data-note="57">A</i>
+    <b class="key-bf" data-note="58">Bb</b>
+    <i class="key-b" data-note="59">B</i>
+    <i class="key-c" data-note="60">C</i>
+    <b class="key-cs" data-note="61">C#</b>
+    <i class="key-d" data-note="62">D</i>
+    <b class="key-ef" data-note="63">Eb</b>
+    <i class="key-e" data-note="64">E</i>
+    <i class="key-f" data-note="65">F</i>
+    <b class="key-fs" data-note="66">F#</b>
+    <i class="key-g" data-note="67">G</i>
+    <b class="key-af" data-note="56">Ab</b>
+    <i class="key-a" data-note="57">A</i>
+    <b class="key-bf" data-note="58">Bb</b>
+    <i class="key-b" data-note="59">B</i>
+    <i class="key-c" data-note="60">C</i>
+    <b class="key-cs" data-note="61">C#</b>
+    <i class="key-d" data-note="62">D</i>
+    <b class="key-ef" data-note="63">Eb</b>
+    <i class="key-e" data-note="64">E</i>
+    <i class="key-f" data-note="65">F</i>
+    <b class="key-fs" data-note="66">F#</b>
+    <i class="key-g" data-note="67">G</i>
+    <b class="key-af" data-note="56">Ab</b>
+    <i class="key-a" data-note="57">A</i>
+    <b class="key-bf key-last" data-note="70">Bb</b>
+  </div><!--instrument-->
+<p class="creds">Made by <a href="">@rumyra</a></p>
+</div>
+
+<script type="text/javascript" src="app.js"></script>
+<!-- <script type="text/javascript" src="scripts/MIDIdataProps.js?v=1"></script> -->
+
+<script type="text/javascript">
+
+function MIDIdataProps(note, velocity) {
+  this.note = note;
+  this.velocity = velocity;
+  this.midiOn = '[144,'+this.note+','+this.velocity+']';
+}
+
+MIDIdataProps.prototype.midiOff = function() {
+  return '[128,'+this.note+','+this.velocity+']';
+}
+// TODO write linear transform function and test
+MIDIdataProps.prototype.leftPos = function() {
+  var leftPos = linearTransform(0, 100, 31, 96);
+  return leftPos;
+}
+MIDIdataProps.prototype.colour = function() {
+  return 'hsla('+( Math.floor(Math.pow(this.note,2)/24) )+',50%,60%,1)';
+}
+MIDIdataProps.prototype.emoji = function() {
+  var a = 144 + 96;
+  var b = 159; // magical part for this range of emoji
+  var c = this.note + 85; // Puts us in the correct range
+  var d = 128; // More emoji range magic
+
+  var onArray = new Uint8Array([a, b, c, d]);
+  var decoder = new TextDecoder();
+  var emoji = decoder.decode(onArray, {stream: true});
+  return emoji;
+}
+MIDIdataProps.prototype.firework = function() {
+  var fireHtml = '<span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span>';
+  return fireHtml;
+}
+MIDIdataProps.prototype.createData = function() {
+  var dataEl = document.createElement('p');
+  dataEl.classList = 'data';
+  dataEl.textContent = this.midiOn;
+  dataEl.style.left = this.leftPos;
+  dataEl.style.color = this.colour;
+  return dataEl;
+}
+
+  // var keyboard = document.querySelector('#keyboard'),
+  var animScreen = document.querySelector('#midi-data'),
+    keyboard = document.querySelector('#keyboard'),
+    virtualKeys = true,
+    midi,
+    data;
+
+// start talking to MIDI controller
+if (navigator.requestMIDIAccess) {
+  navigator.requestMIDIAccess({
+    sysex: false
+  }).then(onMIDISuccess, onMIDIFailure);
+} else {
+  console.warn("No MIDI support in your browser")
+}
+
+// on success get data and hide keyboard
+function onMIDISuccess(midiData) {
+  // this is all our MIDI data
+  midi = midiData;
+  var allInputs = midi.inputs.values();
+  // loop over all available inputs and listen for any MIDI input
+  for (var input = allInputs.next(); input && !input.done; input = allInputs.next()) {
+    // when a MIDI value is received call the onMIDIMessage function
+    input.value.onmidimessage = gotMIDImessage;
+    virtualKeys = false;
+  }
+}
+function onMIDIFailure() {
+  console.warn("Check the freakin connection!! It's always the connection 🙄");
+}
+
+// let's set up virtual first
+
+keyboard.addEventListener("click", function(event) {
+  if (event.target.nodeName == "I" || "B")
+    var thisNote = parseInt(event.target.dataset.note, 10);
+    var midiData = [144,thisNote,100];
+    var midiProp = new MIDIdataProps(midiData[1], midiData[2]);
+    console.log(midiProp);
+    animScreen.appendChild(midiProp.createData);
+  });
+
+    
+  
+
+</script>
+
+</body>
+</html>
