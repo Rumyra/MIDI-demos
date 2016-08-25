@@ -28,6 +28,12 @@ app.get('/', (req, res) => {
 app.get('/piano', (req, res) => {
   res.render('piano');
 });
+app.get('/data', (req, res) => {
+  res.render('data');
+});
+app.get('/emoji', (req, res) => {
+  res.render('emoji');
+});
 // phone view
 app.get('/minim', (req, res) => {
   var thisUrl = req.protocol + '://' + req.get('host');
