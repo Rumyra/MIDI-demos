@@ -22,8 +22,9 @@
 
 </head>
 <body class="page-vismain">
-<audio id="simon" src="Guilt.mp3"></audio>
-<button id="play-audio">Play/Pause Audio</button>
+<!-- <audio id="simon" src="Guilt.mp3"></audio>
+<button id="play-audio">Play/Pause Audio</button> -->
+<p style="font-size:150%;">Get yourself a Brazil JS! Go to <a style="text-decoration:none;border-bottom:1px solid grey;" href="http://goo.gl/UDLgh4">http://goo.gl/UDLgh4</a></p>
 
 <section id="screen"></section>
 
@@ -57,25 +58,45 @@ if (audioContext) {
 // variables
 var audioBuffer,
     analyserNode = audioAPI.createAnalyser(),
-    frequencyData = new Uint8Array(1024),
-    playButton = document.getElementById('play-audio'),
-    guiltMp3 = audioAPI.createMediaElementSource(simonSoundEl);
-analyserNode.fftSize = 2048;
-var playGuilt = function playGuilt() {
-  guiltMp3.connect(analyserNode);
-  guiltMp3.connect(audioAPI.destination);
-  analyserNode.connect(audioAPI.destination);
-  simonSoundEl.play();
+    frequencyData = new Uint8Array(1024);
+    // playButton = document.getElementById('play-audio'),
+    // guiltMp3 = audioAPI.createMediaElementSource(simonSoundEl);
+    analyserNode.fftSize = 2048;
+
+// set up getUserMedia
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+// var playGuilt = function playGuilt() {
+//   guiltMp3.connect(analyserNode);
+//   guiltMp3.connect(audioAPI.destination);
+//   analyserNode.connect(audioAPI.destination);
+//   simonSoundEl.play();
+//   animateSvgs();
+// }
+// //play track
+// playButton.onclick = function() {
+//   if (simonSoundEl.paused) {
+//     playGuilt();
+//   } else {
+//     simonSoundEl.pause();
+//   }
+// }
+
+// pick up sounds
+var pickUpSound = function pickUpSound(stream) {
+  var ambientNoise = audioAPI.createMediaStreamSource(stream);
+  ambientNoise.connect(analyserNode);
   animateSvgs();
 }
-//play track
-playButton.onclick = function() {
-  if (simonSoundEl.paused) {
-    playGuilt();
-  } else {
-    simonSoundEl.pause();
-  }
-}
+navigator.getUserMedia(
+{audio:true},
+  pickUpSound,
+  function(err) {
+    console.log("The following error occured: " + err);
+  } 
+);
+
+
 // logo stuff ----------------------------------------
 function createImage(uniqueID) {
   var outerDiv = document.createElement('div');
