@@ -7,6 +7,7 @@ A set of cool interactive thangs to demonstrate the awesome power of Web MIDI
 ##### General
 
 - [Daniel Mies](https://twitter.com/danielmies)
+- [Ben Foxall](https://twitter.com/benjaminbenben)
 
 ##### Piano Demo
 
