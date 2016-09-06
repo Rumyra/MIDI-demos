@@ -48,7 +48,7 @@ app.get('/stepseq', (req, res) => {
   req.THIS_URL = thisUrl;
   req.JOIN_URL = thisUrl+'/minim';
   req.PUSHKEY = process.env.PUSHKEY;
-  res.render('crowdsynth', req);
+  res.render('stepseq', req);
 });
 // phone view vis
 app.get('/vis', (req, res) => {

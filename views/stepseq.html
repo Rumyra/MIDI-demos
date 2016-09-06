@@ -65,6 +65,14 @@
   });
   // subscribe to channel
   var channel = pusher.subscribe('presence-stepSeq_channel');
+  channel.bind('pusher:subscription_succeeded', function(members) {
+    channel.members.each(function(member) {
+      // for example:
+      var newMinim = createMinim(member.id, channel.members.count);
+      wrapper.appendChild(newMinim);
+    });
+  })
+
 
   // vars
   var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"],
@@ -110,7 +118,6 @@
     dupMinim.setAttribute('data-note', (count%11)-1);
     var colour = (count*10)<360 ? (count*10) : (count%360)*10;
     var dupButtons = dupMinim.getElementsByTagName('button');
-    console.log(dupButtons);
     for (i=0; i<dupButtons.length; i++) {
         dupButtons[i].style.backgroundColor = 'hsla('+colour+', 70%, 55%, 0.9)';
       }
@@ -134,7 +141,6 @@
   }
   // when a user joins add a new minim
   channel.bind('pusher:member_added', function(member) {
-    console.log('theres a new member -' + member.id);
     var newMinim = createMinim(member.id, channel.members.count);
     wrapper.appendChild(newMinim);
   });
@@ -187,7 +193,6 @@
           var minim = document.getElementById(key);
           var buttons = minim.querySelectorAll('button');
           var noteId = parseInt(minim.dataset.note, 10);
-          console.log(noteId);
 
           if(sequence[col] !== null) {
             //slightly randomized velocities
