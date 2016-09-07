@@ -67,6 +67,7 @@ app.get('/visual', (req, res) => {
   res.render('visual', req);
 });
 
+var clientIndex = 0
 app.post('/pusher/auth', function(req, res) {
   const socket_id = req.body.socket_id;
   const channel_name = req.body.channel_name;
@@ -75,7 +76,7 @@ app.post('/pusher/auth', function(req, res) {
     res.send(pusher.authenticate(
       socket_id,
       channel_name,
-      {user_id: userID, user_info: {}}
+      {user_id: userID, user_info: { clientIndex: clientIndex++ }}
     ))
   } else {
     res.sendStatus(401)
