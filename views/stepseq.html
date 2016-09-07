@@ -10,21 +10,21 @@
   <link rel="shortcut icon" href="favicon.ico" />
 
   <!--meta content-->
-  
+
   <meta name="author" content="Ruth John (@rumyra)">
   <meta name="dcterms.rightsHolder" content="Built by Ruth John, United Kingdom, 2015">
   <title>MIDI Demos | Rumyra</title>
   <meta name="description" content="">
 
   <link type="text/css" href="app.css" rel="stylesheet" media="screen" />
-  
+
   <!--include if you want modenizr (rest of scripts just before </body>)
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
   -->
   <script src="scripts/Tone.min.js"></script>
   <script src="scripts/StartAudioContext.js"></script>
   <script src="scripts/pusher.min.js"></script>
-  
+
 </head>
 
 <body>
@@ -46,7 +46,7 @@
     </div>
   </section>
 
-  
+
 </div>
 
 <p class="info creds">Made by <a href="http://twitter.com/rumyra">@rumyra</a> and <a href="http://twitter.com/_2xaa">@_2xaa</a> with <a href="">tone.js</a> and <a href="http://pusher.com">Pusher</a></p>
@@ -140,9 +140,35 @@
   for(var i=0; i < SEQUENCE_SIZE; i++) {
     sequences['minim-main'][i] = null;
   }
+
+  channel.bind('pusher:subscription_succeeded', function(members) {
+
+    members.each(function(member){
+      // don't include ourself
+      if(member.id === members.myID) {
+        return
+      }
+
+      // check that there is a client index on the user data
+      if(typeof(member.info.clientIndex) == 'undefined'){
+        return console.error("no clientIndex provided")
+      }
+
+      console.log('theres a new member -' + member.id);
+      var newMinim = createMinim(member.id, +member.info.clientIndex);
+      wrapper.appendChild(newMinim);
+    })
+  })
+
   // when a user joins add a new minim
   channel.bind('pusher:member_added', function(member) {
-    var newMinim = createMinim(member.id, channel.members.count);
+
+    if(typeof(member.info.clientIndex) == 'undefined'){
+      return console.error("no clientIndex provided")
+    }
+
+    console.log('theres a new member -' + member.id);
+    var newMinim = createMinim(member.id, +member.info.clientIndex);
     wrapper.appendChild(newMinim);
   });
 
