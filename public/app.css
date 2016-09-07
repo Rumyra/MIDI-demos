@@ -40,7 +40,7 @@ html { -webkit-text-size-adjust: 100%; }
   /* TODO remove */;
 }
 body {
-  overflow: auto; padding: 1.5em;
+  overflow: auto;
   box-sizing: border-box;
   background-color: #222;
   font-family: "Montserrat", sans-serif;
@@ -50,6 +50,7 @@ body {
 }
 a {color: #aaa;}
 a:hover {text-decoration: none;}
+.wrapper { padding: 1.5em; box-sizing: border-box;}
 .page-index {
   height: 90vh;
   display: -webkit-box;
@@ -94,8 +95,8 @@ a:hover {text-decoration: none;}
 }
 /*-----------------------------*/
 .page-piano {
-  height: 92vh;
-  position: relative
+  height: 96vh; width:100vw;
+  position: relative; overflow: hidden
 }
 .page-piano .creds {
     position: absolute;
@@ -103,8 +104,41 @@ a:hover {text-decoration: none;}
     right: 0px;
 }
 #midi-data {
-  height: 70vh;
+  height: 68vh;
   position: relative
+}
+#midi-data nav {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+#midi-data nav li {
+    width: 33%;
+    list-style: none;
+    text-align: center;
+}
+#midi-data nav li a {
+    display: block;
+    height: 6vh;
+    background-image: -webkit-linear-gradient(250deg, #333, transparent);
+    background-image: linear-gradient(200deg, #333, transparent);
+    border: 1px solid #aaa;
+    border-radius: 1px;
+    box-shadow: 0px 0px 1.5em #111;
+    line-height: 6vh;
+    text-decoration: none;
+}
+#midi-data nav li a.selected {
+    background-color: pink;
+}
+#midi-data #screen {
+    border: 1px solid green;
+}
+#midi-data #screen section, #midi-data #screen canvas {
+    height: 62vh;
+}
+#midi-data #screen canvas {
+    display: none;
 }
 #midi-data h2 {
     margin-bottom: 20vh;
@@ -157,8 +191,7 @@ a:hover {text-decoration: none;}
 }
 #keyboard {
   position: absolute; bottom:0px; left:50%;
-  margin-left:-560px; width:1150px;
-  overflow: hidden
+  margin-left:-570px; width:1150px
   /*display: flex; justify-content: center; align-items: stretch;*/
 }
 #keyboard i, #keyboard b {

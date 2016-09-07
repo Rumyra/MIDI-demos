@@ -44,6 +44,7 @@ html { -webkit-text-size-adjust: 100%; }
   --white: #efefef;
   --black: #111;
   --unit: 1.5em;
+  --highlight: pink;
 
   /* TODO remove */
   --interface: {
@@ -55,6 +56,12 @@ html { -webkit-text-size-adjust: 100%; }
 
   --buttonStyle: {
     background-image: linear-gradient(20deg, hsla(0,0%,100%,0.5), transparent);
+    border:1px solid var(--lightGrey); border-radius:1px;
+    box-shadow: 0px 0px 1.5em var(--black);
+  };
+
+  --tabStyle: {
+    background-image: linear-gradient(200deg, var(--lessDarkGrey), transparent);
     border:1px solid var(--lightGrey); border-radius:1px;
     box-shadow: 0px 0px 1.5em var(--black);
   };
@@ -84,7 +91,7 @@ html { -webkit-text-size-adjust: 100%; }
 }
 
 body {
-  overflow: auto; padding: var(--unit);
+  overflow: auto;
   box-sizing: border-box;
   background-color: var(--darkGrey);
   font-family: "Montserrat", sans-serif;
@@ -94,6 +101,8 @@ body {
 }
 a {color: var(--lightGrey);}
 a:hover {text-decoration: none;}
+
+.wrapper { padding: var(--unit); box-sizing: border-box;}
 
 .page-index {
   height: 90vh;
@@ -115,13 +124,39 @@ a:hover {text-decoration: none;}
 
 /*-----------------------------*/
 .page-piano {
-  height: 92vh;
-  position: relative;
+  height: 96vh; width:100vw;
+  position: relative; overflow: hidden;
   & .creds {position: absolute; bottom:-20px; right:0px;}
 }
 #midi-data {
-  height: 70vh;
+  height: 68vh;
   position: relative;
+  & nav {
+    display: flex;
+    & li {
+      width: 33%;
+      list-style: none;
+      text-align: center;
+      & a {
+        display: block;
+        height:6vh;
+        @apply --tabStyle;
+        line-height: 6vh;
+        text-decoration: none;
+      }
+    }
+    & li a.selected {
+      background-color: var(--highlight);
+    }
+  }
+  & #screen {
+    border: 1px solid green;
+    & section, & canvas {height:62vh;}
+    & canvas {display: none;}
+  }
+
+
+
   & h2 {
     margin-bottom:20vh;
     font-size: 4em; color: var(--lessDarkGrey);
@@ -156,8 +191,7 @@ a:hover {text-decoration: none;}
 
 #keyboard {
   position: absolute; bottom:0px; left:50%;
-  margin-left:-560px; width:1150px;
-  overflow: hidden;
+  margin-left:-570px; width:1150px;
   /*display: flex; justify-content: center; align-items: stretch;*/
   & i, & b {
     display:inline-block;

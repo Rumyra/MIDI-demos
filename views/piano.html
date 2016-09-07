@@ -30,12 +30,16 @@
   <section id="midi-data">
     
     <nav>
-      <h2>Visual</h2>
-      <h2>Hex</h2>
-      <h2>Data</h2>
+      <li><a class="selected" href="#smoke">Visual</a></li>
+      <li><a href="#emoji">Emoji</a></li>
+      <li><a href="#data">Data</a></li>
     </nav>
 
-    <div id="screen"></div>
+    <!--midi-data, midi-emoji, midi-smoke-->
+    <div id="screen">
+      <section></section>
+      <canvas></canvas>
+    </div>
     
   </section>
 
@@ -99,187 +103,97 @@
 
 <script type="text/javascript">
 
-  // var keyboard = document.querySelector('#keyboard'),
-  var animScreen = document.querySelector('#midi-data'),
-    decoder = new TextDecoder();
-    
-  // TODO refactor both PianoAnim and MIDIanim to use the same object - there's a lot of repetition, I copied and pasted, sorry myself
-  function PianoAnim(screenDiv) {
-    this.screen = screenDiv;
-  }
+(function() {
 
-// key range 30-90
-  PianoAnim.prototype.displayDataEl = function(keyEl) {
-    this.note = keyEl.dataset.note;
-    this.midiData = '[144,'+this.note+',64]';
-    this.left = keyEl.offsetLeft;
-    this.dataEl = this.createDataEl(this.midiData, this.left, this.note);
-    this.screen.appendChild(this.dataEl);
-    this.changeDataToEmoji(this.dataEl, this.note);
-    this.changeEmojiToBall(this.dataEl);
-  };
+    // declare private variables and/or functions
 
-  PianoAnim.prototype.changeDataToEmoji = function(pEl, note) {
-    var para = pEl;
-    var emoji = this.encodeData(note);
-    var firstMorph = setTimeout(function() {
-      para.textContent = emoji;
-      para.classList = 'emoji';
-      para.style.textShadow = '2px 2px 5px hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1), -2px -2px 5px hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)'
-    }, 2000);
-    
-  } 
+    // set up vars
+    var toShow = 'data', // data, emoji or smoke
+      screen = document.getElementById('screen'),
+      screenSection = document.querySelector('#screen section'),
+      screenCanvas = document.querySelector('#screen canvas'),
+      keyboard = document.querySelector('#keyboard'),
+      nav = document.querySelector('nav'),
+      virtualKeys = true,
+      midi,
+      data;
 
-  PianoAnim.prototype.createDataEl = function(text,left,note) {
-    var dataEl = document.createElement('p');
-    dataEl.textContent = text;
-    dataEl.classList = 'data';
-    dataEl.style.left = (left-30)+'px';
-    dataEl.style.color = 'hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)';
-    return dataEl;
-  }
+      // set current view on nav click
+      (function setView() {
+        nav.addEventListener("click", function(event) {
+          nav.querySelectorAll('a').classList = '';
+          if (event.target.nodeName === "A") {
+            event.target.classList = 'selected';
+            var thisLink = event.target.href;
+            thisLink = thisLink.split('#');
+            toShow = thisLink[1];
+          }
+        });
+      })();
 
-  PianoAnim.prototype.encodeData = function(note) {
-    // thank you Max!
-    var a = 144 + 96; // 144 = MIDI noteOn
-    var b = 159; // magical part for this range of emoji
-    var c = parseInt(this.note,10) + 85; // Puts us in the correct range
-    var d = 128; // More emoji range magic
+      // set show properties for MIDI data
+      function MIDIdataProps(note, velocity) {
+        this.note = note;
+        this.velocity = velocity;
+        this.midiOn = '[144,'+this.note+','+this.velocity+']';
+        this.midiOff = '[128,'+this.note+','+this.velocity+']';
+        this.colour = 'hsla('+( Math.floor(Math.pow(this.note,2)/24) )+',50%,60%,1)';
+      }
 
-    var onArray = new Uint8Array([a, b, c, d]);
-    // var emoji = document.createTextNode(decoder.decode(onArray));
-    var emoji = decoder.decode(onArray, {stream: true});
-    return emoji;
-  }
+      // parser function to produce emoji char
+      function makeEmoji(note) {
+        var a = 144 + 96;
+        var b = 159; // magical part for this range of emoji
+        var c = parseInt(note,10) + 85; // Puts us in the correct range
+        var d = 128; // More emoji range magic
 
-  PianoAnim.prototype.changeEmojiToBall = function(pEl) {
-    var para = pEl;
-    var secondMorph = setTimeout(function() {
-      para.innerHTML = '<span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span>';
-      para.classList = 'firework';
-      animateFirework(para);
-    }, 4000);
-  }
+        var onArray = new Uint8Array([a, b, c, d]);
+        var decoder = new TextDecoder();
+        var emoji = decoder.decode(onArray, {stream: true});
+        console.log(emoji);
+        return emoji;
+      }
 
-  var anim = new PianoAnim(animScreen);
-
-  // keyboard.addEventListener("click", function(event) {
-  //   if (event.target.nodeName == "I" || "B")
-  //     console.log("Clicked", event.target);
-  //     anim.displayDataEl(event.target);
-  // });
-
-  function animateFirework(paraEl) {
-    var spans = paraEl.getElementsByTagName('span');
-    console.log(spans);
-    for (var i=0; i<spans.length; i++) {
-      // spans[i].style.transform = 'rotate('+i*30+'deg) translate(150px, 150px)';
-      spans[i].animate(
-        [{transform: 'rotate('+i*30+'deg) translate(0px, 0px)', opacity: '1'},
-        {transform: 'rotate('+((i*30)+60)+'deg) translate(100px, 100px)', opacity: '0'}],
-        {
-          duration: 1000,
-          iterations: 1
+      // adds relevant data to dom based on what is clicked and which data is selected to view
+      function showData(midiProp, leftPos, toShow) {
+        if (toShow === 'smoke') {
+          screenCanvas.style.display = 'block';
+          screenSection.style.display = 'none';
+        } else {
+          screenCanvas.style.display = 'none';
+          screenSection.style.display = 'block';
+          var dataEl = document.createElement('p');
+          if (toShow === 'emoji') {
+            dataEl.classList = 'emoji';
+            var emoji = makeEmoji(midiProp.note);
+            dataEl.textContent = emoji;
+          } else {
+            dataEl.classList = 'data';
+            dataEl.textContent = midiProp.midiOn;
+          }
+          dataEl.style.left = leftPos+'px';
+          dataEl.style.color = midiProp.colour;
+          screenSection.appendChild(dataEl);
         }
-      )
+      }
+
+      // if no MIDI device detected
+      if (virtualKeys) {
+        keyboard.addEventListener("click", function(event) {
+          if (event.target.nodeName === "I" || "B") {
+            var thisNote = parseInt(event.target.dataset.note, 10);
+            var leftPos = event.target.getBoundingClientRect().left;
+            var midiProp = new MIDIdataProps(thisNote, 100);
+            showData(midiProp, leftPos);
+          }
+        });
+      }
+
+    return {
+      // declare public variables and/or functions
     }
-  }
 
-
-// MIDI CONTROLLER----------------------------
-function MIDIAnim(screenDiv) {
-  this.screen = screenDiv;
-}
-
-MIDIAnim.prototype.displayDataEl = function(midiData) {
-  this.newMidiData = midiData;
-  this.midiDataString = "["+midiData[0]+","+midiData[1]+","+midiData[2]+"]";
-  this.note = midiData[1];
-  this.left = this.note;
-  this.dataEl = this.createDataEl(this.midiDataString, this.left, this.note);
-  this.screen.appendChild(this.dataEl);
-  this.changeDataToEmoji(this.dataEl, this.newMidiData);
-  this.changeEmojiToBall(this.dataEl);
-};
-
-MIDIAnim.prototype.createDataEl = function(text,left,note) {
-  var dataEl = document.createElement('p');
-  dataEl.textContent = text;
-  dataEl.classList = 'data';
-  dataEl.style.left = Math.floor(1.5*(left-30))+'%';
-
-  dataEl.style.color = 'hsla('+( Math.floor(Math.pow(note,2)/24) )+',50%,50%,1)';
-  return dataEl;
-}
-
-MIDIAnim.prototype.changeDataToEmoji = function(pEl, noteData) {
-  var para = pEl;
-  var emoji = this.encodeData(noteData);
-  var firstMorph = setTimeout(function() {
-    para.textContent = emoji;
-    para.classList = 'emoji';
-    para.style.textShadow = '2px 2px 5px hsla('+( Math.floor(Math.pow(noteData[1],2)/24) )+',50%,50%,1), -2px -2px 5px hsla('+( Math.floor(Math.pow(noteData[1],2)/24) )+',50%,50%,1)'
-  }, 2000);
-}
-
-MIDIAnim.prototype.encodeData = function(someData) {
-  this.someData = someData;
-  // thank you Max!
-  if (this.someData[0] === 144) {
-    var a = this.someData[0] + 96; // 144 = MIDI noteOn
-  } else {
-    var a = this.someData[0] + 112; // 144 = MIDI noteOn
-  }
-  var b = 159; // magical part for this range of emoji
-  var c = this.someData[1] + 85; // Puts us in the correct range
-  var d = 128; // More emoji range magic
-
-  var onArray = new Uint8Array([a, b, c, d]);
-  // var emoji = document.createTextNode(decoder.decode(onArray));
-  var emoji = decoder.decode(onArray, {stream: true});
-  return emoji;
-}
-
-MIDIAnim.prototype.changeEmojiToBall = function(pEl) {
-  var para = pEl;
-  var secondMorph = setTimeout(function() {
-    para.innerHTML = '<span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span><span>*</span>';
-    para.classList = 'firework';
-    animateFirework(para);
-  }, 4000);
-}
-
-
-var midi, data;
-// start talking to MIDI controller
-if (navigator.requestMIDIAccess) {
-  navigator.requestMIDIAccess({
-    sysex: false
-  }).then(onMIDISuccess, onMIDIFailure);
-} else {
-  console.warn("No MIDI support in your browser")
-}
-
-// on success
-function onMIDISuccess(midiData) {
-  // this is all our MIDI data
-  midi = midiData;
-  var allInputs = midi.inputs.values();
-  // loop over all available inputs and listen for any MIDI input
-  for (var input = allInputs.next(); input && !input.done; input = allInputs.next()) {
-    // when a MIDI value is received call the onMIDIMessage function
-    input.value.onmidimessage = gotMIDImessage;
-  }
-}
-var midiAnim = new MIDIAnim(animScreen);
-function gotMIDImessage(messageData) {
-  midiAnim.displayDataEl(messageData.data);
-}
-
-
-function onMIDIFailure() {
-  console.warn("Check the freakin connection!! It's always the connection 🙄");
-}
+})();
 
 </script>
 
