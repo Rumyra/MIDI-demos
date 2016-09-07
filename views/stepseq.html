@@ -116,7 +116,8 @@
     var dupMinim = masterMinim.cloneNode(true);
     dupMinim.setAttribute('id', uid);
     dupMinim.setAttribute('data-note', (count%11)-1);
-    var colour = (count*10)<360 ? (count*10) : (count%360)*10;
+    var colour = (count%11)*(360/11);
+
     var dupButtons = dupMinim.getElementsByTagName('button');
     for (i=0; i<dupButtons.length; i++) {
         dupButtons[i].style.backgroundColor = 'hsla('+colour+', 70%, 55%, 0.9)';
