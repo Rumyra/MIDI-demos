@@ -30,9 +30,9 @@
   <section id="midi-data">
     
     <nav>
-      <li><a class="selected" href="#smoke">Visual</a></li>
+      <li><a class="selected" href="#data">Data</a></li>
       <li><a href="#emoji">Emoji</a></li>
-      <li><a href="#data">Data</a></li>
+      <!-- <li><a href="#smoke">Visual</a></li> -->
     </nav>
 
     <!--midi-data, midi-emoji, midi-smoke-->
@@ -114,14 +114,20 @@
       screenCanvas = document.querySelector('#screen canvas'),
       keyboard = document.querySelector('#keyboard'),
       nav = document.querySelector('nav'),
+      anchors = nav.querySelectorAll('a'),
       virtualKeys = true,
+      ctx = screenCanvas.getContext('2d'),
+      particles = [],
       midi,
       data;
+
+
+
 
       // set current view on nav click
       (function setView() {
         nav.addEventListener("click", function(event) {
-          nav.querySelectorAll('a').classList = '';
+          anchors.forEach(function(link) {link.classList = ''});
           if (event.target.nodeName === "A") {
             event.target.classList = 'selected';
             var thisLink = event.target.href;
@@ -150,15 +156,60 @@
         var onArray = new Uint8Array([a, b, c, d]);
         var decoder = new TextDecoder();
         var emoji = decoder.decode(onArray, {stream: true});
-        console.log(emoji);
         return emoji;
       }
 
+      function animateSmoke(midiNote, leftPos, topPos, canWidth, canHeight) {
+        requestAnimationFrame(animateSmoke);
+
+        var xPos = leftPos;
+        var yPos = topPos;
+        var note = midiNote;
+        var canvas = {width: canWidth, height: canHeight};
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        var oneSmoke = {
+          x : 200,
+          y : 200,
+          xVel : (Math.random()*10)-5,
+          yVel : (Math.random()*10)-5,
+          hue : Math.floor(Math.pow(note,2)/24),
+          lightness : Math.floor(Math.random() * (100 - 50)) + 50,
+          size : 5
+        }
+        console.log(note);
+
+        particles.push(oneSmoke);
+
+        for (var i=0; i<particles.length; i++) {
+          p = particles[i];
+
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.size,0, Math.PI*2,true);
+          ctx.fill();
+          p.x+=p.xVel;
+          p.y+=p.yVel;
+          //size
+          p.size*=0.96;
+          //gravity
+          //p.yVel +=0.5;
+          ctx.fillStyle = 'hsl('+p.hue+',+80%,'+p.lightness+'%)';
+        }
+      }
+
       // adds relevant data to dom based on what is clicked and which data is selected to view
-      function showData(midiProp, leftPos, toShow) {
+      function showData(midiProp, clickEl, toShow) {
+        var leftPos = clickEl.getBoundingClientRect().left-25;
+        var topPos = clickEl.getBoundingClientRect().top-30;
+
         if (toShow === 'smoke') {
-          screenCanvas.style.display = 'block';
-          screenSection.style.display = 'none';
+          // screenCanvas.style.display = 'block';
+          // screenSection.style.display = 'none';
+          // fitToContainer(screenCanvas);
+          
+          // animateSmoke(midiProp.note, leftPos, topPos, screenCanvas.width, screenCanvas.height);
+
         } else {
           screenCanvas.style.display = 'none';
           screenSection.style.display = 'block';
@@ -177,14 +228,23 @@
         }
       }
 
+      // random fit to container for canvas
+      function fitToContainer(canvas){
+        canvas.style.width='100%';
+        canvas.style.height='100%';
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+
       // if no MIDI device detected
+      // if we pass in the event target here we can get all the MIDI data etc within the called functions
       if (virtualKeys) {
         keyboard.addEventListener("click", function(event) {
           if (event.target.nodeName === "I" || "B") {
+            var targetEl = event.target;
             var thisNote = parseInt(event.target.dataset.note, 10);
-            var leftPos = event.target.getBoundingClientRect().left;
             var midiProp = new MIDIdataProps(thisNote, 100);
-            showData(midiProp, leftPos);
+            showData(midiProp, targetEl, toShow);
           }
         });
       }

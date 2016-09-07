@@ -113,7 +113,7 @@ a:hover {text-decoration: none;}
     display: flex;
 }
 #midi-data nav li {
-    width: 33%;
+    width: 50%;
     list-style: none;
     text-align: center;
 }
@@ -129,16 +129,22 @@ a:hover {text-decoration: none;}
     text-decoration: none;
 }
 #midi-data nav li a.selected {
-    background-color: pink;
+    background: none;
+    box-shadow: none;
+    border: 1px solid #aaa;
+    border-radius: 1px;
+    border-width: 1px 1px 0px;
 }
 #midi-data #screen {
-    border: 1px solid green;
+    height: 62vh;
 }
-#midi-data #screen section, #midi-data #screen canvas {
+#midi-data #screen section {
     height: 62vh;
 }
 #midi-data #screen canvas {
     display: none;
+    width: 100%;
+    height: 62vh;
 }
 #midi-data h2 {
     margin-bottom: 20vh;

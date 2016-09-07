@@ -134,25 +134,27 @@ a:hover {text-decoration: none;}
   & nav {
     display: flex;
     & li {
-      width: 33%;
+      width: 50%;
       list-style: none;
       text-align: center;
       & a {
         display: block;
         height:6vh;
         @apply --tabStyle;
+        
         line-height: 6vh;
         text-decoration: none;
       }
     }
     & li a.selected {
-      background-color: var(--highlight);
+      background:none; box-shadow: none;
+      border:1px solid var(--lightGrey); border-radius:1px; border-width: 1px 1px 0px;
     }
   }
   & #screen {
-    border: 1px solid green;
-    & section, & canvas {height:62vh;}
-    & canvas {display: none;}
+    height:62vh;
+    & section {height:62vh;}
+    & canvas {display: none; width:100%; height: 62vh;}
   }
 
 
