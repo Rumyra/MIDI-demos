@@ -24,7 +24,7 @@
 <body class="page-vismain">
 <!-- <audio id="simon" src="Guilt.mp3"></audio>
 <button id="play-audio">Play/Pause Audio</button> -->
-<p style="font-size:150%;">Get yourself a Brazil JS! Go to <a style="text-decoration:none;border-bottom:1px solid grey;" href="http://goo.gl/UDLgh4">http://goo.gl/UDLgh4</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;made by @rumyra</p>
+<!--<p style="font-size:150%;">Get yourself a Brazil JS! Go to <a style="text-decoration:none;border-bottom:1px solid grey;" href="http://goo.gl/UDLgh4">http://goo.gl/UDLgh4</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;made by @rumyra</p>-->
 
 <section id="screen"></section>
 
@@ -102,14 +102,14 @@ function createImage(uniqueID) {
   var outerDiv = document.createElement('div');
   outerDiv.setAttribute("id", uniqueID);
   var theImage = document.createElement('img');
-  theImage.src = "braziljs.svg";
+  theImage.src = "MKlogo.svg";
   outerDiv.appendChild(theImage);
   return outerDiv;
 }
 function oneGem(id) {
   this.id = id;
-  this.type = 'yellow';
-  this.view = "rotate(0deg) rotate3d(1,0,0, 0deg)";
+  this.type = 'MKlogo';
+  this.view = "zoom-norm";
 }
 var allGemParams = [],
   screen = document.getElementById('screen'),
@@ -124,7 +124,7 @@ function updateGemArray(id, param, value) {
         case 'img-color':
           allGemParams[i].type = value;
         break;
-        case 'view':
+        case 'img-zoom':
           allGemParams[i].view = value;
         break;
       }
@@ -135,33 +135,33 @@ channel.bind('client-audience_joined', function(data) {
   // createGem(data.person, screen);
   var thisGem = new oneGem(data.person);
   allGemParams.push(thisGem);
+  
   restart();
   updateSvgs();
 });
 channel.bind('client-audience_data', function(data) {
   updateGemArray(data.person, data.param, data.setting);
-  restart()
+  
+  restart();
+  updateSvgs();
 });
 // high 600 - 250 mid 250 - 100 low 100 - 0
 function updateSvgs() {
-  requestAnimationFrame(updateSvgs);
-  // Animation stuff--------------------------------
-  // var allRepeatedEls = document.getElementsByTagName('svg');
   var totalEls = allGemParams.length;
-  // Simple example of changing opacity & colour -> EDIT THIS!
   for (var i=0; i<totalEls; i++) {
     var imgElement = document.getElementById(allGemParams[i].id).children[0];
     // show correct view
-    if (allGemParams[i].type === 'green') {
-      imgElement.src = 'braziljsGreen.svg';
-    } else if (allGemParams[i].type === 'blue') {
-      imgElement.src = 'braziljsBlue.svg';
+    if (allGemParams[i].type === 'robot') {
+      imgElement.src = 'MKrobot.svg';
     } else {
-      imgElement.src = 'braziljs.svg';
+      imgElement.src = 'MKlogo.svg';
     }
-    var rotation = allGemParams[i].view;
-    // imgElement.style.transform = rotation;
-    
+
+    if (allGemParams[i].view === 'zoom-big') {
+      imgElement.style.transform = "scale(1.5)";
+    } else {
+      imgElement.style.transform = "scale(1)";
+    }
   }
 }
 function animateSvgs() {
@@ -189,7 +189,6 @@ function animateSvgs() {
 //   createGem(screen);
 // }
 var allDivs = d3.select("#screen");
-// console.log(allGems);
 // set layout
 var w = window.innerWidth;
 var h = window.innerHeight;
@@ -202,7 +201,6 @@ var force = d3.layout
   .on("tick", tick);
 function tick() {
   d3.selectAll("div.gem").attr("style", function(d) {
-    // console.log(d)
     return 'left:'+d.x+'px; top: '+d.y+'px;';
   })
 }

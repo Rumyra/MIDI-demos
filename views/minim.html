@@ -79,7 +79,7 @@
   // Once subscribed, store the UID
   channel.bind('pusher:subscription_succeeded', function() {
       meId = channel.members.me.id;
-      meCol = (+info.clientIndex%11)*(360/11)
+      meCol = Math.floor((channel.members.me.info.clientIndex%11)*(360/11));
       for (i=0; i<buttons.length; i++) {
         buttons[i].style.backgroundColor = 'hsla('+meCol+', 70%, 55%, 0.9)';
       }

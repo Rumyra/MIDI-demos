@@ -66,14 +66,22 @@
   // subscribe to channel
   var channel = pusher.subscribe('presence-stepSeq_channel');
   channel.bind('pusher:subscription_succeeded', function(members) {
-    channel.members.each(function(member) {
-      // for example:
-      var newMinim = createMinim(member.id, channel.members.count);
-      wrapper.appendChild(newMinim);
-    });
+
+    members.each(function(member){
+      // don't include ourself
+      if(member.id === members.myID) {
+        return
+      } else {
+        var newMinim = createMinim(member.id, +member.info.clientIndex);
+        wrapper.appendChild(newMinim);  
+      }
+
+      // check that there is a client index on the user data
+      if(typeof(member.info.clientIndex) == 'undefined'){
+        return console.error("no clientIndex provided")
+      }
+    })
   })
-
-
   // vars
   var noteNames = ["beep", "chirp", "crash", "curve", "ding", "hihat", "kick", "punch", "shadow", "snare", "symbol"],
     SEQUENCE_SIZE = 8,
@@ -115,8 +123,8 @@
     var masterMinim = document.getElementById('minim-main');
     var dupMinim = masterMinim.cloneNode(true);
     dupMinim.setAttribute('id', uid);
-    dupMinim.setAttribute('data-note', (count%11)-1);
-    var colour = (count%11)*(360/11);
+    dupMinim.setAttribute('data-note', (count%11));
+    var colour = Math.floor((count%11)*(360/11));
 
     var dupButtons = dupMinim.getElementsByTagName('button');
     for (i=0; i<dupButtons.length; i++) {
@@ -130,7 +138,6 @@
     for(var i=0; i < SEQUENCE_SIZE; i++) {
       sequences[uid][i] = null;
     }
-
     return dupMinim;
   }
   //instigate first minim
@@ -140,25 +147,6 @@
   for(var i=0; i < SEQUENCE_SIZE; i++) {
     sequences['minim-main'][i] = null;
   }
-
-  channel.bind('pusher:subscription_succeeded', function(members) {
-
-    members.each(function(member){
-      // don't include ourself
-      if(member.id === members.myID) {
-        return
-      }
-
-      // check that there is a client index on the user data
-      if(typeof(member.info.clientIndex) == 'undefined'){
-        return console.error("no clientIndex provided")
-      }
-
-      console.log('theres a new member -' + member.id);
-      var newMinim = createMinim(member.id, +member.info.clientIndex);
-      wrapper.appendChild(newMinim);
-    })
-  })
 
   // when a user joins add a new minim
   channel.bind('pusher:member_added', function(member) {

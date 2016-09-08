@@ -22,21 +22,24 @@
 <body class="page-vis">
 
   <article id="controls">
-    <header><h2>Control Your Brazil.JS!</h2></header>
-
     <div class="image">
-      <img src="braziljs.svg" id="the-image" />
+      <img src="MKlogo.svg" id="the-image" />
     </div>
 
+    <header><h2>Control Your MK Logo!</h2></header>
+
     <form>
-      <h4>Change the color of your Brazil.JS:</h4>
       <div class="form-field">
-        <input type="radio" name="img-color" id="green" value="green" class="input-radio" />
-        <label for="green" class="label-radio">Green</label>
-        <input type="radio" name="img-color" id="blue" value="blue" class="input-radio" />
-        <label for="blue" class="label-radio">Blue</label>
-        <input checked type="radio" name="img-color" id="yellow" value="yellow" class="input-radio" />
-        <label for="yellow" class="label-radio">Yellow</label>
+        <input checked type="radio" name="img-color" id="MK" value="MK" class="input-radio" />
+        <label for="MK" class="label-radio">MK Logo</label>
+        <input type="radio" name="img-color" id="robot" value="robot" class="input-radio" />
+        <label for="robot" class="label-radio">Robot</label>
+      </div>
+      <div class="form-field">
+        <input checked type="radio" name="img-zoom" id="zoom-norm" value="zoom-norm" class="input-radio" />
+        <label for="zoom-norm" class="label-radio">Normal</label>
+        <input type="radio" name="img-zoom" id="zoom-big" value="zoom-big" class="input-radio" />
+        <label for="zoom-big" class="label-radio">Zoom</label>
       </div>
 
     </form>
@@ -77,7 +80,6 @@ for (var i=0; i<allLabels.length; i++) {
 }
 // send data function
 function sendData(uniqueID, inputEl) {
-  console.log(inputEl);
   channel.trigger(
     'client-audience_data',
     {
@@ -86,14 +88,18 @@ function sendData(uniqueID, inputEl) {
       "setting": inputEl.value //can be white, red, green or blue
     }
   );
-  if (inputEl.value === 'green') {
-    imageEl.src = "braziljsGreen.svg";
-  } else if (inputEl.value === 'blue') {
-    imageEl.src = "braziljsBlue.svg";
+  console.log(inputEl.value);
+  if (inputEl.value === 'robot') {
+    imageEl.src = "MKrobot.svg";
+  } else if (inputEl.value === 'zoom-norm') {
+    imageEl.style.transform = "scale(1)";
+  } else if (inputEl.value === 'zoom-big') {
+    imageEl.style.transform = "scale(1.3)";
   } else {
-    imageEl.src = "braziljs.svg";
+    imageEl.src = "MKlogo.svg";
   }
 }
+//mk robot zoom-norm zoom-big
 // if (window.DeviceOrientationEvent) {
 //   window.addEventListener('deviceorientation', deviceOrientationHandler, false);
 // }

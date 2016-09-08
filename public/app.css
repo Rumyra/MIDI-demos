@@ -82,16 +82,13 @@ a:hover {text-decoration: none;}
     background-image: linear-gradient(20deg, transparent, hsla(0,0%,100%,0.5));
 }
 .page-index a:nth-child(1) {
-    background-color: green;
+    background-color: #ce4072;
 }
 .page-index a:nth-child(2) {
-    background-color: yellow;
+    background-color: #336980;
 }
 .page-index a:nth-child(3) {
-    background-color: blue;
-}
-.page-index a:nth-child(4) {
-    background-color: white;
+    background-color: #ececec;
 }
 /*-----------------------------*/
 .page-piano {
@@ -336,15 +333,15 @@ a:hover {text-decoration: none;}
 .page-vis {}
 #controls {
   width:300px;
-  padding:20px; margin:0px auto
+  padding:16px; margin:0px auto
 }
 #controls .image {
     text-align: center;
-    padding: 20px 0px;
+    padding: 16px 0px;
 }
 #controls header {
-    padding: 1em 0px;
-    border-bottom: 1px solid $blue;
+    padding: 0.5em 0px;
+    border-top: 2px solid #ce4072;
 }
 #controls h4 {
     padding: 2em 0px 2em;
@@ -374,12 +371,12 @@ a:hover {text-decoration: none;}
   text-align: center;
 }
 .input-radio:checked + .label-radio {
-    background: white;
+    background: #336980;
     color: black;
     text-shadow: 0 0 1px rgba(0,0,0,.7);
 }
 .input-radio:focus + .label-radio {
-    outline-color: blue;
+    outline-color: #ce4072;
     outline-offset: -2px;
     outline-style: auto;
     outline-width: 5px;
