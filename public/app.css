@@ -85,9 +85,12 @@ a:hover {text-decoration: none;}
     background-color: #ce4072;
 }
 .page-index a:nth-child(2) {
-    background-color: #336980;
+    background-color: #ce4072;
 }
 .page-index a:nth-child(3) {
+    background-color: #336980;
+}
+.page-index a:nth-child(4) {
     background-color: #ececec;
 }
 /*-----------------------------*/

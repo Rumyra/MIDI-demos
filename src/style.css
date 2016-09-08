@@ -121,8 +121,9 @@ a:hover {text-decoration: none;}
   }
   & a:hover {background-image: linear-gradient(20deg, transparent, hsla(0,0%,100%,0.5))}
   & a:nth-child(1) {background-color: var(--brandColOne);}
-  & a:nth-child(2) {background-color: var(--brandColTwo);}
-  & a:nth-child(3) {background-color: var(--brandColThree);}
+  & a:nth-child(2) {background-color: var(--brandColOne);}
+  & a:nth-child(3) {background-color: var(--brandColTwo);}
+  & a:nth-child(4) {background-color: var(--brandColThree);}
 }
 
 /*-----------------------------*/
