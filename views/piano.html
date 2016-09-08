@@ -126,28 +126,30 @@
 
       // set current view on nav click
       (function setView() {
-        nav.addEventListener("click", function(event) {
-          anchors.forEach(function(link) {link.classList = ''});
-          if (event.target.nodeName === "A") {
-            event.target.classList = 'selected';
-            var thisLink = event.target.href;
+        for (i=0; i<anchors.length; i++) {
+          
+          anchors[i].addEventListener("click", function(event) {
+            anchors.forEach(function(link) {link.classList = ''});
+            event.preventDefault();
+            this.classList = 'selected';
+            var thisLink = this.href;
             thisLink = thisLink.split('#');
             toShow = thisLink[1];
-          }
-        });
+          });
+        }
       })();
 
-      (function setView() {
-        nav.addEventListener("touchstart", function(event) {
-          anchors.forEach(function(link) {link.classList = ''});
-          if (event.target.nodeName === "A") {
-            event.target.classList = 'selected';
-            var thisLink = event.target.href;
-            thisLink = thisLink.split('#');
-            toShow = thisLink[1];
-          }
-        });
-      })();
+      // (function setView() {
+      //   anchors.addEventListener("touchstart", function(event) {
+      //     anchors.forEach(function(link) {link.classList = ''});
+      //     if (event.target.nodeName === "A") {
+      //       event.target.classList = 'selected';
+      //       var thisLink = event.target.href;
+      //       thisLink = thisLink.split('#');
+      //       toShow = thisLink[1];
+      //     }
+      //   });
+      // })();
 
       // set show properties for MIDI data
       function MIDIdataProps(note, velocity) {
