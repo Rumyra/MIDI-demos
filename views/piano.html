@@ -137,6 +137,18 @@
         });
       })();
 
+      (function setView() {
+        nav.addEventListener("touchstart", function(event) {
+          anchors.forEach(function(link) {link.classList = ''});
+          if (event.target.nodeName === "A") {
+            event.target.classList = 'selected';
+            var thisLink = event.target.href;
+            thisLink = thisLink.split('#');
+            toShow = thisLink[1];
+          }
+        });
+      })();
+
       // set show properties for MIDI data
       function MIDIdataProps(note, velocity) {
         this.note = note;
