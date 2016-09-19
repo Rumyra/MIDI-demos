@@ -46,9 +46,9 @@ html { -webkit-text-size-adjust: 100%; }
   --unit: 1.5em;
   --highlight: pink;
 
-  --brandColOne: #ce4072;
-  --brandColTwo: #336980;
-  --brandColThree: #ececec;
+  --brandColOne: #ec2e52;
+  --brandColTwo: #32608f;
+  --brandColThree: #f7f8fa;
 
   /* TODO remove */
   --interface: {
@@ -121,9 +121,8 @@ a:hover {text-decoration: none;}
   }
   & a:hover {background-image: linear-gradient(20deg, transparent, hsla(0,0%,100%,0.5))}
   & a:nth-child(1) {background-color: var(--brandColOne);}
-  & a:nth-child(2) {background-color: var(--brandColOne);}
-  & a:nth-child(3) {background-color: var(--brandColTwo);}
-  & a:nth-child(4) {background-color: var(--brandColThree);}
+  & a:nth-child(2) {background-color: var(--brandColTwo);}
+  & a:nth-child(3) {background-color: var(--brandColThree);}
 }
 
 /*-----------------------------*/
@@ -174,7 +173,7 @@ a:hover {text-decoration: none;}
   }
 }
 @keyframes moveUp {
-  0% {bottom:20px;}
+  0% {bottom:0px;}
   100% {bottom:900px;}
 }
 .data {text-indent: -70px;}
@@ -289,7 +288,8 @@ a:hover {text-decoration: none;}
 #controls {
   width:300px;
   padding:16px; margin:0px auto;
-  & .image {text-align:center; padding:16px 0px;}
+  & .image {text-align:center; padding:16px 0px; min-height:340px;}
+  & img {width:280px; height:auto;}
 
   & header {
     padding: 0.5em 0px;
@@ -316,6 +316,9 @@ a:hover {text-decoration: none;}
   border-radius: 1px;
   transition: all .2s;
   text-align: center;
+}
+.field-three .label-radio {
+  min-width: 32%;
 }
 .input-radio:checked + .label-radio {
     background: var(--brandColTwo);

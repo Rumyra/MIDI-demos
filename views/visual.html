@@ -102,14 +102,14 @@ function createImage(uniqueID) {
   var outerDiv = document.createElement('div');
   outerDiv.setAttribute("id", uniqueID);
   var theImage = document.createElement('img');
-  theImage.src = "MKlogo.svg";
+  theImage.src = "smartWeb.svg";
   outerDiv.appendChild(theImage);
   return outerDiv;
 }
 function oneGem(id) {
   this.id = id;
-  this.type = 'MKlogo';
-  this.view = "zoom-norm";
+  this.type = 'smartWeb';
+  this.view = "norm";
 }
 var allGemParams = [],
   screen = document.getElementById('screen'),
@@ -124,7 +124,7 @@ function updateGemArray(id, param, value) {
         case 'img-color':
           allGemParams[i].type = value;
         break;
-        case 'img-zoom':
+        case 'img-effect':
           allGemParams[i].view = value;
         break;
       }
@@ -151,16 +151,21 @@ function updateSvgs() {
   for (var i=0; i<totalEls; i++) {
     var imgElement = document.getElementById(allGemParams[i].id).children[0];
     // show correct view
-    if (allGemParams[i].type === 'robot') {
-      imgElement.src = 'MKrobot.svg';
+    if (allGemParams[i].type === 'netscape') {
+      imgElement.src = 'netscape.gif';
     } else {
-      imgElement.src = 'MKlogo.svg';
+      imgElement.src = 'smartWeb.svg';
     }
 
     if (allGemParams[i].view === 'zoom-big') {
       imgElement.style.transform = "scale(1.5)";
+    } else if (allGemParams[i].view === 'invert') {
+      imgElement.style.webkitFilter = "invert(100%)";
+    imgElement.style.filter = "invert(100%)";
     } else {
       imgElement.style.transform = "scale(1)";
+      imgElement.style.webkitFilter = "invert(0%)";
+      imgElement.style.filter = "invert(0%)";
     }
   }
 }

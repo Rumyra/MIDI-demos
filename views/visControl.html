@@ -23,23 +23,25 @@
 
   <article id="controls">
     <div class="image">
-      <img src="MKlogo.svg" id="the-image" />
+      <img src="smartWeb.svg" id="the-image" />
     </div>
 
-    <header><h2>Control Your MK Logo!</h2></header>
+    <header><h2>Control Your Logo!</h2></header>
 
     <form>
       <div class="form-field">
-        <input checked type="radio" name="img-color" id="MK" value="MK" class="input-radio" />
-        <label for="MK" class="label-radio">MK Logo</label>
-        <input type="radio" name="img-color" id="robot" value="robot" class="input-radio" />
-        <label for="robot" class="label-radio">Robot</label>
+        <input checked type="radio" name="img-color" id="smartWeb" value="smartWeb" class="input-radio" />
+        <label for="smartWeb" class="label-radio">Smartweb Logo</label>
+        <input type="radio" name="img-color" id="netscape" value="netscape" class="input-radio" />
+        <label for="netscape" class="label-radio">The Web!</label>
       </div>
-      <div class="form-field">
-        <input checked type="radio" name="img-zoom" id="zoom-norm" value="zoom-norm" class="input-radio" />
-        <label for="zoom-norm" class="label-radio">Normal</label>
-        <input type="radio" name="img-zoom" id="zoom-big" value="zoom-big" class="input-radio" />
+      <div class="form-field field-three">
+        <input checked type="radio" name="img-effect" id="norm" value="norm" class="input-radio" />
+        <label for="norm" class="label-radio">Normal</label>
+        <input type="radio" name="img-effect" id="zoom-big" value="zoom-big" class="input-radio" />
         <label for="zoom-big" class="label-radio">Zoom</label>
+        <input type="radio" name="img-effect" id="invert" value="invert" class="input-radio" />
+        <label for="invert" class="label-radio">Invert</label>
       </div>
 
     </form>
@@ -89,14 +91,19 @@ function sendData(uniqueID, inputEl) {
     }
   );
   console.log(inputEl.value);
-  if (inputEl.value === 'robot') {
-    imageEl.src = "MKrobot.svg";
-  } else if (inputEl.value === 'zoom-norm') {
+  if (inputEl.value === 'netscape') {
+    imageEl.src = "netscape.gif";
+  } else if (inputEl.value === 'norm') {
     imageEl.style.transform = "scale(1)";
+    imageEl.style.webkitFilter = "invert(0%)";
+    imageEl.style.filter = "invert(0%)";
   } else if (inputEl.value === 'zoom-big') {
     imageEl.style.transform = "scale(1.3)";
+  } else if (inputEl.value === 'invert') {
+    imageEl.style.webkitFilter = "invert(100%)";
+    imageEl.style.filter = "invert(100%)";
   } else {
-    imageEl.src = "MKlogo.svg";
+    imageEl.src = "smartWeb.svg";
   }
 }
 //mk robot zoom-norm zoom-big
