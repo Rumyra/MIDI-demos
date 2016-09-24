@@ -204,11 +204,12 @@ var force = d3.layout
   .nodes(allGemParams)
   .size([w,h])
   .on("tick", tick);
+
 function tick() {
-  d3.selectAll("div.gem").attr("style", function(d) {
-    return 'left:'+d.x+'px; top: '+d.y+'px;';
-  })
+  d3.selectAll("div.gem")
+    .style('transform', d => `translate(${d.x}px, ${d.y}px)`)
 }
+
 var nodes = force.nodes();
 var node = allDivs.selectAll("div.gem")
 function restart() {
