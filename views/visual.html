@@ -173,20 +173,12 @@ function animateSvgs() {
   requestAnimationFrame(animateSvgs);
   analyserNode.getByteFrequencyData(frequencyData);
   // Animation stuff--------------------------------
-  // var allRepeatedEls = document.getElementsByTagName('svg');
-  var totalEls = allGemParams.length;
-  // Simple example of changing opacity & colour -> EDIT THIS!
-  for (var i=0; i<totalEls; i++) {
-    var imgElement = document.getElementById(allGemParams[i].id).children[0];
-    
+
+  gem.style('opacity', (d,i) => {
     var freqDataKey = i*20;
-    if (frequencyData[freqDataKey] > 140){
-      //start animation on element
-      imgElement.style.opacity = "1";
-    } else {
-      imgElement.style.opacity = "0.3";
-    }
-  }
+    return (frequencyData[freqDataKey] > 140) ? 1 : 0.3 
+  })
+
 }
 // d3 stuff -------------------------------------
 // var tempAr = [1,2,3,4,5,6,7];
@@ -194,6 +186,7 @@ function animateSvgs() {
 //   createGem(screen);
 // }
 var allDivs = d3.select("#screen");
+var gem = allDivs.selectAll('div.gem')
 // set layout
 var w = window.innerWidth;
 var h = window.innerHeight;
@@ -211,12 +204,21 @@ function tick() {
 }
 
 var nodes = force.nodes();
-var node = allDivs.selectAll("div.gem")
+
 function restart() {
-  d3.selectAll("div.gem").remove()
-  node.data(nodes).enter().append('div').attr('class', 'gem').html(function(d){
-    return createImage(d.id).outerHTML
-  })
+
+  gem = gem.data(allGemParams)
+
+  gem.enter()
+    .append('div')
+    .attr('class', 'gem')
+    .html(function(d){
+      return createImage(d.id).outerHTML
+    })
+
+  gem.exit()
+    .remove()
+
   force.start();
 }
 restart()
