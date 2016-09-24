@@ -97,15 +97,7 @@ navigator.getUserMedia(
 );
 
 
-// logo stuff ----------------------------------------
-function createImage(uniqueID) {
-  var outerDiv = document.createElement('div');
-  outerDiv.setAttribute("id", uniqueID);
-  var theImage = document.createElement('img');
-  theImage.src = "smartWeb.svg";
-  outerDiv.appendChild(theImage);
-  return outerDiv;
-}
+
 function oneGem(id) {
   this.id = id;
   this.type = 'smartWeb';
@@ -147,27 +139,15 @@ channel.bind('client-audience_data', function(data) {
 });
 // high 600 - 250 mid 250 - 100 low 100 - 0
 function updateSvgs() {
-  var totalEls = allGemParams.length;
-  for (var i=0; i<totalEls; i++) {
-    var imgElement = document.getElementById(allGemParams[i].id).children[0];
-    // show correct view
-    if (allGemParams[i].type === 'netscape') {
-      imgElement.src = 'netscape.gif';
-    } else {
-      imgElement.src = 'smartWeb.svg';
-    }
+  gem
+    .attr('src', d => 
+      d.type === 'netscape' ? 'netscape.gif' : 'smartWeb.svg'
+    )
+    .style('filter', d => 
+      d.view === 'invert' ? 'invert(100%)' : 'invert(0%)'
+    )
+    .style('transform', transform)
 
-    if (allGemParams[i].view === 'zoom-big') {
-      imgElement.style.transform = "scale(1.5)";
-    } else if (allGemParams[i].view === 'invert') {
-      imgElement.style.webkitFilter = "invert(100%)";
-    imgElement.style.filter = "invert(100%)";
-    } else {
-      imgElement.style.transform = "scale(1)";
-      imgElement.style.webkitFilter = "invert(0%)";
-      imgElement.style.filter = "invert(0%)";
-    }
-  }
 }
 function animateSvgs() {
   requestAnimationFrame(animateSvgs);
@@ -186,7 +166,7 @@ function animateSvgs() {
 //   createGem(screen);
 // }
 var allDivs = d3.select("#screen");
-var gem = allDivs.selectAll('div.gem')
+var gem = allDivs.selectAll('.gem')
 // set layout
 var w = window.innerWidth;
 var h = window.innerHeight;
@@ -199,8 +179,14 @@ var force = d3.layout
   .on("tick", tick);
 
 function tick() {
-  d3.selectAll("div.gem")
-    .style('transform', d => `translate(${d.x}px, ${d.y}px)`)
+  d3.selectAll(".gem")
+    .style('transform', transform)
+}
+
+
+function transform(d) {
+  var s = d.view === 'zoom-big' ? 1.5 : 1
+  return `translate(${d.x/s}px, ${d.y/s}px) scale(${s})`
 }
 
 var nodes = force.nodes();
@@ -210,11 +196,9 @@ function restart() {
   gem = gem.data(allGemParams)
 
   gem.enter()
-    .append('div')
+    .append('img')
     .attr('class', 'gem')
-    .html(function(d){
-      return createImage(d.id).outerHTML
-    })
+    .attr('src', 'smartWeb.svg')
 
   gem.exit()
     .remove()
