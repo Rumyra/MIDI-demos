@@ -139,14 +139,19 @@ channel.bind('client-audience_data', function(data) {
 });
 // high 600 - 250 mid 250 - 100 low 100 - 0
 function updateSvgs() {
+
   gem
     .attr('src', d => 
-      d.type === 'netscape' ? 'netscape.gif' : 'smartWeb.svg'
+      d.type === 'netscape' ? 'netscape.gif' : 'wdc.svg'
     )
     .style('filter', d => 
       d.view === 'invert' ? 'invert(100%)' : 'invert(0%)'
     )
-    .style('transform', transform)
+    .attr('width', d =>
+      d.view === 'zoom-big' ? '150' : '100'
+    )
+    // .style('transform', transform)
+
 
 }
 function animateSvgs() {
@@ -172,8 +177,8 @@ var w = window.innerWidth;
 var h = window.innerHeight;
 var force = d3.layout
   .force()
-  .linkDistance(500)
-  .charge(-150)
+  .linkDistance(0)
+  .charge(-650)
   .nodes(allGemParams)
   .size([w,h])
   .on("tick", tick);
@@ -185,8 +190,8 @@ function tick() {
 
 
 function transform(d) {
-  var s = d.view === 'zoom-big' ? 1.5 : 1
-  return `translate(${d.x/s}px, ${d.y/s}px) scale(${s})`
+  // var s = d.view === 'zoom-big' ? 1.5 : 1
+  return `translate(${d.x}px, ${d.y}px)`
 }
 
 var nodes = force.nodes();
@@ -198,7 +203,7 @@ function restart() {
   gem.enter()
     .append('img')
     .attr('class', 'gem')
-    .attr('src', 'smartWeb.svg')
+    .attr('src', 'wdc.svg')
 
   gem.exit()
     .remove()

@@ -46,9 +46,9 @@ html { -webkit-text-size-adjust: 100%; }
   --unit: 1.5em;
   --highlight: pink;
 
-  --brandColOne: #ec2e52;
-  --brandColTwo: #32608f;
-  --brandColThree: #f7f8fa;
+  --brandColOne: #fff100;
+  --brandColTwo: #305675;
+  --brandColThree: #eee;
 
   /* TODO remove */
   --interface: {
@@ -334,7 +334,7 @@ a:hover {text-decoration: none;}
 }
 
 .page-vismain {
-  & img {width:70px; height:50px;}
+  & img {width:100px; height:100px;}
   & #screen {
     width:75vw; height:100vh;
     box-sizing: border-box;
