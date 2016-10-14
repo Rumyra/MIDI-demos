@@ -82,10 +82,10 @@ a:hover {text-decoration: none;}
     background-image: linear-gradient(20deg, transparent, hsla(0,0%,100%,0.5));
 }
 .page-index a:nth-child(1) {
-    background-color: #fff100;
+    background-color: #0d6a71;
 }
 .page-index a:nth-child(2) {
-    background-color: #305675;
+    background-color: #91d3d8;
 }
 .page-index a:nth-child(3) {
     background-color: #eee;
@@ -346,7 +346,7 @@ a:hover {text-decoration: none;}
 }
 #controls header {
     padding: 0.5em 0px;
-    border-top: 2px solid #fff100;
+    border-top: 2px solid #0d6a71;
 }
 #controls h4 {
     padding: 2em 0px 2em;
@@ -379,12 +379,12 @@ a:hover {text-decoration: none;}
   min-width: 32%;
 }
 .input-radio:checked + .label-radio {
-    background: #305675;
+    background: #91d3d8;
     color: black;
     text-shadow: 0 0 1px rgba(0,0,0,.7);
 }
 .input-radio:focus + .label-radio {
-    outline-color: #fff100;
+    outline-color: #0d6a71;
     outline-offset: -2px;
     outline-style: auto;
     outline-width: 5px;

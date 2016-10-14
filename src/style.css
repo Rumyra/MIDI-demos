@@ -46,8 +46,8 @@ html { -webkit-text-size-adjust: 100%; }
   --unit: 1.5em;
   --highlight: pink;
 
-  --brandColOne: #fff100;
-  --brandColTwo: #305675;
+  --brandColOne: #0d6a71;
+  --brandColTwo: #91d3d8;
   --brandColThree: #eee;
 
   /* TODO remove */

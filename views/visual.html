@@ -142,7 +142,7 @@ function updateSvgs() {
 
   gem
     .attr('src', d => 
-      d.type === 'netscape' ? 'netscape.gif' : 'wdc.svg'
+      d.type === 'netscape' ? 'netscape.gif' : 'redev.svg'
     )
     .style('filter', d => 
       d.view === 'invert' ? 'invert(100%)' : 'invert(0%)'
@@ -203,7 +203,7 @@ function restart() {
   gem.enter()
     .append('img')
     .attr('class', 'gem')
-    .attr('src', 'wdc.svg')
+    .attr('src', 'redev.svg')
 
   gem.exit()
     .remove()
