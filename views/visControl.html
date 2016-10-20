@@ -23,7 +23,7 @@
 
   <article id="controls">
     <div class="image">
-      <img src="redev.svg" id="the-image" />
+      <img src="hat.jpg" id="the-image" />
     </div>
 
     <header><h2>Control Your Logo!</h2></header>
@@ -31,9 +31,9 @@
     <form>
       <div class="form-field">
         <input checked type="radio" name="img-color" id="smartWeb" value="smartWeb" class="input-radio" />
-        <label for="smartWeb" class="label-radio">re:develop</label>
+        <label for="smartWeb" class="label-radio">HAT</label>
         <input type="radio" name="img-color" id="netscape" value="netscape" class="input-radio" />
-        <label for="netscape" class="label-radio">The Web!</label>
+        <label for="netscape" class="label-radio">Ghost</label>
       </div>
       <div class="form-field field-three">
         <input checked type="radio" name="img-effect" id="norm" value="norm" class="input-radio" />
@@ -92,7 +92,7 @@ function sendData(uniqueID, inputEl) {
   );
   console.log(inputEl.value);
   if (inputEl.value === 'netscape') {
-    imageEl.src = "netscape.gif";
+    imageEl.src = "ghost.png";
   } else if (inputEl.value === 'norm') {
     imageEl.style.transform = "scale(1)";
     imageEl.style.webkitFilter = "invert(0%)";
@@ -103,7 +103,7 @@ function sendData(uniqueID, inputEl) {
     imageEl.style.webkitFilter = "invert(100%)";
     imageEl.style.filter = "invert(100%)";
   } else {
-    imageEl.src = "redev.svg";
+    imageEl.src = "hat.jpg";
   }
 }
 //mk robot zoom-norm zoom-big
