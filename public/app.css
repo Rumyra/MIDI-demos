@@ -50,7 +50,6 @@ body {
 }
 a {color: #aaa;}
 a:hover {text-decoration: none;}
-.wrapper { padding: 1.5em; box-sizing: border-box;}
 .page-index {
   height: 90vh;
   display: -webkit-box;
